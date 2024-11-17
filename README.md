@@ -3,13 +3,20 @@
 
 
 ## Roles
-**Project Manager:** Josh
-**API 1:** Colin
+**Project Manager:** Josh 
+
+ **API 1:** Colin
+ 
 **API 2:** Hunter
+
 **Frontend 1:** Abdulrahman
+
 **Frontend 2:** Eitan Miron
+
 **Database 1:** Dylan Gregory
+
 **Database 2:** Adrian
+
 
 ## Goal by Sunday, Nov. 23
 - [ ] Complete everything for **organization pages** listed below
