@@ -4,8 +4,8 @@ const ObjectId = Schema.ObjectId;
 
 
 const TimeSlotSchema = new mongoose.Schema({
-    Start: {type: String, required: true, match: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/},
-    End: {type: String, required: true, match: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/}
+    Start: {type: String, required: true},
+    End: {type: String, required: true}
 })
 
 const AvailabilitySchema = new mongoose.Schema({
