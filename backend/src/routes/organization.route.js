@@ -10,7 +10,7 @@ const publicRoute = express.Router();
 
 module.exports = function (app) {
 
-
+    // register organization
     publicRoute.post('/register', async (req, res) => {
         let {email, password, name, type, category, info, website, location} = req.body;
         if (!email || !password || !name || !type || !category || !info || !website || !location) {
@@ -52,138 +52,158 @@ module.exports = function (app) {
         });
     });
 
+    // login organization
+    publicRoute.post('/login', async (req, res) => {
+        let {email, password} = req.body;
+        // todo: login logic
+        res.send('org login route');
+    });
 
-    // sign up for an organization as volunteer
-    route.post('/sign-up', async (req, res) => {
-        let {orgId} = req.body;
-        let volunteerEmail = 'test'; // todo: replace with req.session.email
-        if (!orgId) {
+    // get organization profile by either name, email, or id
+    route.get('/profile', async (req, res) => {
+        let {name, email, id} = req.query;
+        if (!name && !email && !id) {
             return res.status(400).send({
                 error: 'Invalid parameters'
             });
         }
-        let volunteer = await userModel.findOne({
-            Email: volunteerEmail
-        }).exec();
-        if (!volunteer) {
+
+        let org;
+        if (name) {
+            org = await orgModel.findOne({
+                Name: {
+                    $regex: name,
+                    $options: 'i'
+                }
+            }, {
+                Password: 0
+            }).exec();
+        } else if (email) {
+            org = await orgModel.findOne({
+                Email: email
+            }, {
+                Password: 0
+            }).exec();
+        } else {
+            org = await orgModel.findOne({
+                _id: id
+            }, {
+                Password: 0
+            }).exec();
+        }
+
+        if (!org) {
             return res.status(400).send({
-                error: 'Volunteer not found'
+                error: 'Organization not found'
             });
         }
-        let volunteerId = volunteer._id;
+
+        res.send(org);
+    });
+
+    // subscribe to newsletter
+    route.post('/subscribe', async (req, res) => {
+        let {orgID} = req.body;
+        let email = req.session.email;
+        if (!email) {
+            return res.status(400).send({
+                error: 'Invalid parameters'
+            });
+        }
+
+        let account = await userModel.findOne({
+            Email: email
+        }).exec();
+        if (!account) {
+            return res.status(400).send({
+                error: 'Account not found'
+            });
+        }
+
+
         let org = await orgModel.findOne({
-            _id: orgId
+            _id: orgID
         }).exec();
         if (!org) {
             return res.status(400).send({
                 error: 'Organization not found'
             });
         }
-        // check if volunteer is already signed up
-        let myOrgs = volunteer.Organizations;
-        if (myOrgs.includes(orgId)) {
+
+        let subscribed = org.Volunteers.includes(account._id);
+        if (subscribed) {
             return res.status(400).send({
-                error: 'Already signed up'
+                error: 'Already subscribed'
             });
         }
 
-        myOrgs.push(orgId); // if not, sign up
-        await userModel.updateOne({
-            Email: volunteerEmail
-        }, {
-            Organizations: myOrgs
-        }).catch(err => {
-            console.log(err);
-            return res.status(500).send({
-                error: 'Error signing up'
-            });
-        });
-
-        // add volunteer to organization
-        let volunteers = org.Volunteers;
-        volunteers.push(volunteerId);
+        org.Volunteers.push(account._id);
         await orgModel.updateOne({
-            _id: orgId
+            Email: email
         }, {
-            Volunteers: volunteers
+            Volunteers: org.Volunteers
         }).catch(err => {
             console.log(err);
             return res.status(500).send({
-                error: 'Error signing up'
+                error: 'Error subscribing'
             });
         });
         res.send({
-            success: 'Signed up'
+            success: 'Subscribed'
         });
     });
 
-    // cancel sign up for an organization as volunteer
-    route.post('/leave', async (req, res) => {
-        let {orgId} = req.body;
-        let volunteerEmail = 'test'; // todo: replace with req.session.email
-        if (!orgId) {
+    // unsubscribe from newsletter
+    route.post('/unsubscribe', async (req, res) => {
+        let {orgID} = req.body;
+        let email = req.session.email;
+        if (!email) {
             return res.status(400).send({
                 error: 'Invalid parameters'
             });
         }
-        let volunteer = await userModel.findOne({
-            Email: volunteerEmail
+
+        let account = await userModel.findOne({
+            Email: email
         }).exec();
-        if (!volunteer) {
+        if (!account) {
             return res.status(400).send({
-                error: 'Volunteer not found'
+                error: 'Account not found'
             });
         }
-        let volunteerId = volunteer._id;
+
+
         let org = await orgModel.findOne({
-            _id: orgId
+            Email: email
         }).exec();
         if (!org) {
             return res.status(400).send({
                 error: 'Organization not found'
             });
         }
-        // check if volunteer is already signed up
-        let myOrgs = volunteer.Organizations;
-        if (!myOrgs.includes(orgId)) {
+
+        let subscribed = org.Volunteers.includes(account._id);
+        if (!subscribed) {
             return res.status(400).send({
-                error: 'Not signed up'
+                error: 'Not subscribed'
             });
         }
 
-        myOrgs = myOrgs.filter(id => id !== orgId); // if signed up, cancel
-        await userModel.updateOne({
-            Email: volunteerEmail
-        }, {
-            Organizations: myOrgs
-        }).catch(err => {
-            console.log(err);
-            return res.status(500).send({
-                error: 'Error leaving'
-            });
-        });
-
-        // remove volunteer from organization
-        let volunteers = org.Volunteers;
-        volunteers = volunteers.filter(id => id !== volunteerId);
+        org.Volunteers = org.Volunteers.filter(id => id !== account._id);
         await orgModel.updateOne({
-            _id: orgId
+            Email: email
         }, {
-            Volunteers: volunteers
+            Volunteers: org.Volunteers
         }).catch(err => {
             console.log(err);
             return res.status(500).send({
-                error: 'Error leaving'
+                error: 'Error unsubscribing'
             });
         });
         res.send({
-            success: 'Left'
+            success: 'Unsubscribed'
         });
     });
-
-
-
-
 
     app.use('/organizations', publicRoute);
     app.use('/organizations', [sessionMiddleware], route);

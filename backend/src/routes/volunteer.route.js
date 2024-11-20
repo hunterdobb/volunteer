@@ -49,6 +49,11 @@ module.exports = function (app) {
         });
     });
 
+    publicRoute.post('/login', async (req, res) => {
+       // todo: login logic
+        let {email, password} = req.body;
+         res.send('login route');
+    });
 
     // Get profile by email
     route.get('/profile/:email', async (req, res) => {
@@ -92,7 +97,7 @@ module.exports = function (app) {
         }
 
         await userModel.updateOne({
-            Email: 'test' // todo: replace with req.session.email
+            Email: req.session.email // todo: replace with req.session.email
         }, {
             Experience: experience,
             Interests: interests,
@@ -122,7 +127,7 @@ module.exports = function (app) {
         }
 
         await userModel.updateOne({
-            Email: 'test2' // todo: replace with req.session.email
+            Email: req.session.email // todo: replace with req.session.email
         }, {
             Availability: availability
         }).catch(err => {
