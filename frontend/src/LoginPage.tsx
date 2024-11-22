@@ -1,46 +1,59 @@
 import React, { useState } from "react";
 import "./login.css";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        // Handle login logic, then navigate
-        navigate('/personal'); // Or navigate to OrganizationPage based on user role(TODO: implement this logic)
-      };
+    const handleLogin = async (e: React.FormEvent) => {
+      e.preventDefault();
+      try {
+        const response = await axios.post('/login', { email, password }); 
+        const { role } = response.data; 
+        
+        if (role === 'organization') {
+          navigate('/organizations/login');
+        } else {
+          navigate('/volunteers/login');
+        }
+      } catch (err) {
+        setError('Invalid email or password.');
+      }
+    };
     
-      return (
-        <div>
-          <h2>Login</h2>
-          <form onSubmit={handleSubmit}>
+
+    return (
+      <div>
+        <h1>Login</h1>
+        <form onSubmit={handleLogin}>
+          <div>
+            <label>Email:</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
+              required
             />
+          </div>
+          <div>
+            <label>Password:</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
+              required
             />
-            <button type="submit">Login</button>
-          </form>
-        </div>
-      );
-    };
-    
-    export default LoginPage;
-    
-    
-    
-    
-    
-    
-    
-    
+          </div>
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          <button type="submit">Login</button>
+        </form>
+      </div>
+    );
+  };
+  
+  export default LoginPage;
+      
