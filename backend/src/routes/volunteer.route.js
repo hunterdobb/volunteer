@@ -89,13 +89,6 @@ module.exports = function (app) {
             });
         }
 
-        // verify experience, skills, and interests are comma separated strings
-        if (typeof experience !== 'string' || typeof skills !== 'string' || typeof interests !== 'string') {
-            return res.status(400).send({
-                error: 'Invalid parameters'
-            });
-        }
-
         await userModel.updateOne({
             Email: req.session.email // todo: replace with req.session.email
         }, {
