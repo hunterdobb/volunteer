@@ -8,7 +8,7 @@ const RegisterOrgPage = () => {
     Email: '',
     Password: '',
     Name: '',
-    Type: '',
+    Type: 'Profit',
     Category: 0,
     Desc: '',
     Website: '',

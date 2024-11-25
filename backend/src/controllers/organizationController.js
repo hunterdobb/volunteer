@@ -26,7 +26,6 @@ const register = async (req, res) => {
     const { Email, Password, Name, Type, Category, Desc, Website, Location } = req.body;
     // const { email, password } = req.body;
 
-    console.log("Hello from register")
     try {
       const organization = await Organization.register(
         Email, Password, Name, Type, Category, Desc, Website, Location);
