@@ -14,11 +14,8 @@ const app = express();
 app.use(express.json()); // for parsing application/json
 app.use(cors()); // cross-origin resource sharing
 app.use(helmet()); // security middleware (https://helmetjs.github.io/)
+app.use((req, res, next) => { console.log(req.path, req.method); next() })
 //app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded (if needed)
-app.use((req, res, next) => {
-    console.log(req.path, req.method)
-    next()
-})
 
 // routes
 app.use('/api/organization', organizationRoutes);

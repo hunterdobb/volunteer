@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const User = require('../models/userModel')
+const Organization = require('../models/organization.model')
 
 const requireAuth = async (req, res, next) => {
     // verify authentication
@@ -14,7 +14,7 @@ const requireAuth = async (req, res, next) => {
     try {
         const { _id } = jwt.verify(token, process.env.JWT_SECRET)
         // attach the user _id property to the request so we can access it in other parts of the code
-        req.user = await User.findOne({ _id }).select('_id')
+        req.organizationUser = await Organization.findOne({ _id }).select('_id')
         next()
     } catch (error) {
         console.log(error)

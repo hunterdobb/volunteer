@@ -24,7 +24,6 @@ const login = async (req, res) => {
 // signup organization
 const register = async (req, res) => {
     const { Email, Password, Name, Type, Category, Desc, Website, Location } = req.body;
-    // const { email, password } = req.body;
 
     try {
       const organization = await Organization.register(

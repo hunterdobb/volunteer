@@ -23,6 +23,7 @@ const organizationSchema = new Schema({
     timestamps: true 
 });
 
+
 // organization static methods
 
 // REGISTER
@@ -63,25 +64,6 @@ organizationSchema.statics.register = async function(
     })
 
     return organization
-
-    // await orgModel.create({
-    //     Email: email,
-    //     Password: hash,
-    //     Name: name,
-    //     Type: type,
-    //     Category: category,
-    //     Desc: info,
-    //     Website: website,
-    //     Location: location
-    // }).catch(err => {
-    //     console.log(err);
-    //     return res.status(500).send({
-    //         error: 'Error registering organization'
-    //     });
-    // })
-    // res.send({
-    //     success: 'Organization registered'
-    // });
 }
 
 //LOGIN
