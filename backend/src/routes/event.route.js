@@ -1,5 +1,5 @@
 const express = require('express');
-const sessionMiddleware = require('../middleware/session')
+const sessionMiddleware = require('../middleware/requireAuth')
 const orgSchema = require('../models/organization.model');
 const userSchema = require('../models/volunteer.model');
 const eventSchema = require('../models/event.model');

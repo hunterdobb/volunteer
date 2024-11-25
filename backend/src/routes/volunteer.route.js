@@ -1,5 +1,5 @@
 const express = require('express');
-const sessionMiddleware = require('../middleware/session')
+const sessionMiddleware = require('../middleware/requireAuth')
 const volunteerSchema = require('../models/volunteer.model');
 const mongoose = require('mongoose');
 const userModel = mongoose.model('Volunteers', volunteerSchema);
@@ -7,9 +7,6 @@ const route = express.Router();
 const publicRoute = express.Router();
 
 module.exports = function (app) {
-
-
-
     // Register volunteer
     publicRoute.post('/register', async (req, res) => {
         let {email, password, firstName, lastName, birthday} = req.body;
