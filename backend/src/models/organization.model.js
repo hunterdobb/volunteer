@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt')
-const validator = require('validator')
+const validator = require('validator');
+const { options } = require('../routes/organization.route');
 
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
@@ -23,6 +24,8 @@ const organizationSchema = new Schema({
 });
 
 // organization static methods
+
+// REGISTER
 organizationSchema.statics.register = async function(
     email, password, name, type, category, desc, website, location
 ) {
@@ -36,10 +39,12 @@ organizationSchema.statics.register = async function(
     if (!validator.isStrongPassword(password)) {
         throw Error('Password is too weak')
     }
-    const exists = await this.findOne({ Email: email  });
+    const exists = await this.findOne({ Email: email });
     if (exists) {
-        console.log('Email already in use')
         throw Error('Email already in use')
+    }
+    if (!validator.isURL(website)) {
+        throw Error('Invalid Website URL')
     }
 
     // encrypt password
@@ -79,6 +84,7 @@ organizationSchema.statics.register = async function(
     // });
 }
 
+//LOGIN
 organizationSchema.statics.login = async function(email, password) {
     if (!email || !password) {
         throw Error('All fields must be filled')
