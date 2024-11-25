@@ -12,7 +12,7 @@ const LoginPage: React.FC = () => {
     const handleLogin = async (e: React.FormEvent) => {
       e.preventDefault();
       try {
-        const response = await axios.post('http://localhost:5000/login', { email, password }); 
+        const response = await axios.post('http://localhost:5000/api/organization/login', { email, password }); 
         const { role } = response.data; 
         
         if (role === 'organization') {

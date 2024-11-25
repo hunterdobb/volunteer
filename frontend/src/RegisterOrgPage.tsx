@@ -5,15 +5,16 @@ import "./register.css";
 
 const RegisterOrgPage = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    name: '',
-    type: '',
-    category: 0,
-    desc: '',
-    website: '',
-    location: '',
+    Email: '',
+    Password: '',
+    Name: '',
+    Type: '',
+    Category: 0,
+    Desc: '',
+    Website: '',
+    Location: '',
   });
+
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -25,7 +26,7 @@ const RegisterOrgPage = () => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/organizations/register', formData);// TODO: figure this out
+      await axios.post('http://localhost:5000/api/organization/register', formData);// TODO: figure this out
       navigate('/login'); // Redirect to login page after successful registration
     } catch (err) {
       setError('Failed to register. Please try again.');
@@ -40,8 +41,8 @@ const RegisterOrgPage = () => {
           <label>Email:</label>
           <input
             type="email"
-            name="email"
-            value={formData.email}
+            name="Email"
+            value={formData.Email}
             onChange={handleChange}
             required
           />
@@ -50,8 +51,8 @@ const RegisterOrgPage = () => {
           <label>Password:</label>
           <input
             type="password"
-            name="password"
-            value={formData.password}
+            name="Password"
+            value={formData.Password}
             onChange={handleChange}
             required
           />
@@ -60,15 +61,15 @@ const RegisterOrgPage = () => {
           <label>Organization Name:</label>
           <input
             type="text"
-            name="name"
-            value={formData.name}
+            name="Name"
+            value={formData.Name}
             onChange={handleChange}
             required
           />
         </div>
         <div>
           <label>Type:</label>
-          <select name="type" value={formData.type} onChange={handleChange}>
+          <select name="Type" value={formData.Type} onChange={handleChange}>
             <option value="Profit">Profit</option>
             <option value="Non-Profit">Non-Profit</option>
           </select>
@@ -77,8 +78,8 @@ const RegisterOrgPage = () => {
           <label>Category:</label>
           <input
             type="number"
-            name="category"
-            value={formData.category}
+            name="Category"
+            value={formData.Category}
             onChange={handleChange}
             required
           />
@@ -87,8 +88,8 @@ const RegisterOrgPage = () => {
           <label>Description:</label>
           <input
             type="text"
-            name="desc"
-            value={formData.desc}
+            name="Desc"
+            value={formData.Desc}
             onChange={handleChange}
           />
         </div>
@@ -96,8 +97,8 @@ const RegisterOrgPage = () => {
           <label>Website:</label>
           <input
             type="text"
-            name="website"
-            value={formData.website}
+            name="Website"
+            value={formData.Website}
             onChange={handleChange}
           />
         </div>
@@ -105,8 +106,8 @@ const RegisterOrgPage = () => {
           <label>Location:</label>
           <input
             type="text"
-            name="location"
-            value={formData.location}
+            name="Location"
+            value={formData.Location}
             onChange={handleChange}
           />
         </div>

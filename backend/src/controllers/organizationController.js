@@ -11,10 +11,10 @@ const login = async (req, res) => {
 
     try {
         const organization = await Organization.login(email, password);
-    
+
         // create a token
-        const token = createToken(user._id)
-    
+        const token = createToken(organization._id)
+
         res.status(200).json({email, token})
       } catch (error) {
         res.status(400).json({error: error.message})
@@ -25,7 +25,8 @@ const login = async (req, res) => {
 const register = async (req, res) => {
     const { Email, Password, Name, Type, Category, Desc, Website, Location } = req.body;
     // const { email, password } = req.body;
-  
+
+    console.log("Hello from register")
     try {
       const organization = await Organization.register(
         Email, Password, Name, Type, Category, Desc, Website, Location);

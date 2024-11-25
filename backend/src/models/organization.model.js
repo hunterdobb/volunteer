@@ -36,7 +36,7 @@ organizationSchema.statics.register = async function(
     if (!validator.isStrongPassword(password)) {
         throw Error('Password is too weak')
     }
-    const exists = await this.findOne({ email })
+    const exists = await this.findOne({ Email: email  });
     if (exists) {
         console.log('Email already in use')
         throw Error('Email already in use')
@@ -84,12 +84,12 @@ organizationSchema.statics.login = async function(email, password) {
         throw Error('All fields must be filled')
     }
 
-    const organization = await this.findOne({ email })
+    const organization = await this.findOne({ Email: email });
     if (!organization) {
         throw Error('Account not found')
     }
 
-    const match = await bcrypt.compare(password, organization.password)
+    const match = await bcrypt.compare(password, organization.Password)
     if (!match) {
         throw Error('Account not found')
     }
