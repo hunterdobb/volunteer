@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import "./register.css";
 
 const RegisterOrgPage = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +25,7 @@ const RegisterOrgPage = () => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post('/organizations/register', formData);// TODO: figure this out
+      await axios.post('http://localhost:5000/organizations/register', formData);// TODO: figure this out
       navigate('/login'); // Redirect to login page after successful registration
     } catch (err) {
       setError('Failed to register. Please try again.');
@@ -110,7 +111,7 @@ const RegisterOrgPage = () => {
           />
         </div>
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Register</button>
+        <button className="registerButton" type="submit">Register</button>
       </form>
     </div>
   );

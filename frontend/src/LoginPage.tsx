@@ -12,7 +12,7 @@ const LoginPage: React.FC = () => {
     const handleLogin = async (e: React.FormEvent) => {
       e.preventDefault();
       try {
-        const response = await axios.post('/login', { email, password }); 
+        const response = await axios.post('http://localhost:5000/login', { email, password }); 
         const { role } = response.data; 
         
         if (role === 'organization') {
@@ -49,7 +49,7 @@ const LoginPage: React.FC = () => {
             />
           </div>
           {error && <p style={{ color: 'red' }}>{error}</p>}
-          <button type="submit">Login</button>
+          <button className="loginButton" type="submit">Login</button>
         </form>
       </div>
     );

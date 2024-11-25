@@ -1,0 +1,37 @@
+/* General styling for the Home page container */
+.home-container {
+    text-align: center;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 40px;
+    background-color: #80acd2; /* Light blue for the container background */
+    border: 3px solid #a2bbd5; /* Blue border for emphasis */
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Page heading styling */
+.home-container h1 {
+    font-family: Garamond, serif;
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Navigation links styling */
+.home-container nav {
+    margin-top: 20px;
+}
+
+.home-container nav a {
+    text-decoration: none;
+    font-size: 16px;
+    color: #ffffff;
+    font-weight: bold;
+    margin: 0 10px;
+    transition: color 0.3s;
+}
+
+.home-container nav a:hover {
+    color: #0056b3;
+}
