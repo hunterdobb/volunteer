@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const Organization = require('../models/organization.model')
 
-const requireAuth = async (req, res, next) => {
+const orgRequireAuth = async (req, res, next) => {
     // verify authentication
     const { authorization } = req.headers
 
@@ -13,7 +13,7 @@ const requireAuth = async (req, res, next) => {
 
     try {
         const { _id } = jwt.verify(token, process.env.JWT_SECRET)
-        // attach the user _id property to the request so we can access it in other parts of the code
+        // attach the organization _id property to the request so we can access it in other parts of the code
         req.organizationUser = await Organization.findOne({ _id }).select('_id')
         next()
     } catch (error) {
@@ -22,7 +22,7 @@ const requireAuth = async (req, res, next) => {
     }
 }
 
-module.exports = requireAuth
+module.exports = orgRequireAuth
 
 
 // module.exports = function (req, res, next) {

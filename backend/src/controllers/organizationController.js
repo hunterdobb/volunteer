@@ -1,5 +1,6 @@
 const Organization = require('../models/organization.model')
 const jwt = require('jsonwebtoken')
+const mongoose = require('mongoose')
 
 const createToken = (_id) => {
     return jwt.sign({_id}, process.env.JWT_SECRET, { expiresIn: '7d' })
@@ -27,7 +28,8 @@ const register = async (req, res) => {
 
     try {
       const organization = await Organization.register(
-        Email, Password, Name, Type, Category, Desc, Website, Location);
+        Email, Password, Name, Type, Category, Desc, Website, Location
+      );
   
       // create jwt
       const token = createToken(organization._id)
@@ -37,8 +39,67 @@ const register = async (req, res) => {
       res.status(400).json({error: error.message})
     }
   };
+
+  // get account info
+  const getPrivateInfo = async (req, res) => {
+    const {id} = req.params
+    if (!mongoose.isValidObjectId(id)) {
+        return res.status(404).json({error: 'No organization found'})
+    }
+
+    const organization = await Organization.findById(id)
+    if (!organization) {
+        return res.status(404).json({error: 'No organization found'})
+    }
+
+    res.status(200).json(organization)
+}
+
+  // get public info (not including login info)
+  const getPublicInfo = async (req, res) => {
+    const {id} = req.params
+    if (!mongoose.isValidObjectId(id)) {
+        return res.status(404).json({error: 'No organization found'})
+    }
+
+    const organization = await Organization.findOne({_id: id}, {Email:0, Password:0, _id:0, Volunteers:0})
+    if (!organization) {
+        return res.status(404).json({error: 'No organization found'})
+    }
+
+    res.status(200).json(organization)
+}
+
+  // get public info (not including login info)
+  const getAll = async (req, res) => {
+    const all = await Organization.find({}, {Email:0, Password:0, _id:0, Volunteers:0})
+    if (!all) {
+        return res.status(404).json({error: 'No organizations found'})
+    }
+
+    res.status(200).json(all)
+}
+
+  // update account info
+  const updateAccount = async (req, res) => {
+    const { id } = req.params
+    if (!mongoose.isValidObjectId(id)) {
+        return res.status(404).json({error: 'No organization found'})
+    }
+
+    try {
+        const organization = await Organization.updateAccount(id, {...req.body})
+        res.status(200).json(organization) // send back updated info
+    } catch (error) {
+        res.status(400).json({error: error.message})
+    } 
+}
   
   module.exports = {
     login,
-    register
+    register,
+    getPrivateInfo,
+    updateAccount,
+    getPublicInfo,
+    getAll
   };
