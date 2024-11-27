@@ -1,24 +1,26 @@
 const express = require('express');
 
 const { 
-    register, login, updateAccount,
-    getPrivateInfo,
-    getPublicInfo,
-    getAll
+    register, login, updateAccount, getAccount, getPublicInfo, getAll
     // subscribe,
     // unsubscribe
 } = require('../controllers/organizationController')
 
-const router = express.Router();
+const requireAuth = require('../middleware/orgRequireAuth')
 
+const router = express.Router();
+router.use('/account', requireAuth);
+
+// Public routes
 router.post('/register', register)
 router.post('/login', login)
-router.patch('/account/:id', updateAccount)
-router.get('/account/:id', getPrivateInfo)
+router.get('/public/:id', getPublicInfo)
+router.get('/public', getAll)
 
-router.get('/:id', getPublicInfo)
-router.get('/', getAll)
+// Protected account routes
 
+router.get('/account', getAccount)
+router.patch('/account', updateAccount)
 
 // router.post('/subscribe/:id', subscribe)
 // router.post('/unsubscibe/:id', unsubscribe)

@@ -1,70 +1,70 @@
 const express = require('express');
-const sessionMiddleware = require('../middleware/requireAuth')
-const orgSchema = require('../models/organization.model');
-const userSchema = require('../models/volunteer.model');
-const eventSchema = require('../models/event.model');
-const mongoose = require('mongoose');
-const orgModel = mongoose.model('Organizations', orgSchema);
-const userModel = mongoose.model('Volunteers', userSchema);
-const eventModel = mongoose.model('Events', eventSchema);
-const route = express.Router();
-const publicRoute = express.Router();
+// const sessionMiddleware = require('../middleware/requireAuth')
+// const orgSchema = require('../models/organization.model');
+// const userSchema = require('../models/volunteer.model');
+// const eventSchema = require('../models/event.model');
+// const mongoose = require('mongoose');
+// const orgModel = mongoose.model('Organizations', orgSchema);
+// const userModel = mongoose.model('Volunteers', userSchema);
+// const eventModel = mongoose.model('Events', eventSchema);
+// const route = express.Router();
+// const publicRoute = express.Router();
 
 module.exports = function (app) {
 
-    // let organizations create events
-    route.post('/create', async (req, res) => {
-        let {title, desc, location, date, startTime, endTime, duration, volunteersNeeded} = req.body;
-        let orgEmail = req.session.email;
-        if (!title || !desc || !location || !date || !startTime || !endTime || !duration || !volunteersNeeded) {
-            return res.status(400).send({
-                error: 'Invalid parameters'
-            });
-        }
+    // // let organizations create events
+    // route.post('/create', async (req, res) => {
+    //     let {title, desc, location, date, startTime, endTime, duration, volunteersNeeded} = req.body;
+    //     let orgEmail = req.session.email;
+    //     if (!title || !desc || !location || !date || !startTime || !endTime || !duration || !volunteersNeeded) {
+    //         return res.status(400).send({
+    //             error: 'Invalid parameters'
+    //         });
+    //     }
 
-        // check if organization exists with session email
-        let org = await orgModel.findOne({
-            Email: orgEmail
-        }).exec();
-        if (!org) {
-            return res.status(400).send({
-                error: 'Organization not found'
-            });
-        }
+    //     // check if organization exists with session email
+    //     let org = await orgModel.findOne({
+    //         Email: orgEmail
+    //     }).exec();
+    //     if (!org) {
+    //         return res.status(400).send({
+    //             error: 'Organization not found'
+    //         });
+    //     }
 
-        // check if event already exists
-        let event = await eventModel.findOne({
-            Title: title
-        }).exec();
+    //     // check if event already exists
+    //     let event = await eventModel.findOne({
+    //         Title: title
+    //     }).exec();
 
-        if (event) {
-            return res.status(400).send({
-                error: 'Event already exists'
-            });
-        }
+    //     if (event) {
+    //         return res.status(400).send({
+    //             error: 'Event already exists'
+    //         });
+    //     }
 
-        // create event
-        await eventModel.create({
-            Title: title,
-            Description: desc,
-            Location: location,
-            Date: new Date(startTime),
-            StartTime: new Date(startTime),
-            EndTime: new Date(endTime),
-            VolsNeeded: volunteersNeeded,
-            CurrentVols: 0,
-            OrgID: org._id
-        }).catch(err => {
-            console.log(err);
-            return res.status(500).send({
-                error: 'Error creating event'
-            });
-        });
+    //     // create event
+    //     await eventModel.create({
+    //         Title: title,
+    //         Description: desc,
+    //         Location: location,
+    //         Date: new Date(startTime),
+    //         StartTime: new Date(startTime),
+    //         EndTime: new Date(endTime),
+    //         VolsNeeded: volunteersNeeded,
+    //         CurrentVols: 0,
+    //         OrgID: org._id
+    //     }).catch(err => {
+    //         console.log(err);
+    //         return res.status(500).send({
+    //             error: 'Error creating event'
+    //         });
+    //     });
 
-        res.send({
-            success: 'Event created'
-        });
-    });
+    //     res.send({
+    //         success: 'Event created'
+    //     });
+    // });
 
     // sign up for an organization as volunteer
     route.post('/sign-up', async (req, res) => {

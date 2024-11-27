@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
-
-const Event = new Schema({
+const eventSchema = new Schema({
     Location: String,
     Date: Date,
     Description: String,
@@ -15,7 +14,8 @@ const Event = new Schema({
     StartTime: Date,
     Volunteers: [ObjectId],
 }, {
-    collection: 'Events'
+    collection: 'Events',
+    timestamps: true
 });
 
-module.exports = Event;
+module.exports = mongoose.model('Event', eventSchema);
