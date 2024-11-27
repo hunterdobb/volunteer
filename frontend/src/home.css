@@ -18,20 +18,60 @@
     color: #333;
 }
 
-/* Navigation links styling */
-.home-container nav {
-    margin-top: 20px;
+/* Options container styling */
+.options-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
 }
 
-.home-container nav a {
-    text-decoration: none;
-    font-size: 16px;
-    color: #ffffff;
-    font-weight: bold;
-    margin: 0 10px;
+/* Individual option card styling */
+.option {
+    text-align: center;
+    background-color: #c7c3ca; /* White background for each option */
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 35%; /* Adjust width for a balanced layout */
+    cursor: pointer;
+    position: relative; /* Needed for dropdown menu positioning */
+}
+
+.option h2 {
+    font-size: 20px;
+    font-style: italic;
+    color: #0e0e0e;
+    margin-bottom: 10px;
     transition: color 0.3s;
 }
 
-.home-container nav a:hover {
-    color: #0056b3;
+.option h2:hover {
+    color: #003d80;
+}
+
+/* Dropdown menu styling */
+.dropdown-menu {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #c7c3ca;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+    z-index: 10;
+}
+
+.dropdown-menu a {
+    display: block;
+    text-decoration: none;
+    color: #0b0b0b;
+    font-weight: lighter;
+    padding: 8px 12px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.dropdown-menu a:hover {
+    background-color: #0056b3;
+    color: #ffffff;
 }

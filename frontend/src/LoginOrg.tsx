@@ -3,7 +3,7 @@ import "./login.css";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const LoginPage: React.FC = () => {
+const LoginOrg: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -55,5 +55,5 @@ const LoginPage: React.FC = () => {
     );
   };
   
-  export default LoginPage;
+  export default LoginOrg;
       
