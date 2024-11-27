@@ -32,7 +32,7 @@ organizationSchema.statics.register = async function(
 ) {
     // validation
     if (!email || !password || !name || !type || !desc || !website || !location) {
-        throw Error('Invalid parameters')
+        throw Error('Please fill out all the fields')
     }
     if (!validator.isEmail(email)) {
         throw Error('Invalid Email')
@@ -66,10 +66,10 @@ organizationSchema.statics.register = async function(
     return organization
 }
 
-//LOGIN
+// LOGIN
 organizationSchema.statics.login = async function(email, password) {
     if (!email || !password) {
-        throw Error('All fields must be filled')
+        throw Error('Please fill out all the fields')
     }
 
     const organization = await this.findOne({ Email: email });
@@ -80,6 +80,24 @@ organizationSchema.statics.login = async function(email, password) {
     const match = await bcrypt.compare(password, organization.Password)
     if (!match) {
         throw Error('Account not found')
+    }
+
+    return organization
+}
+
+// UPDATE
+organizationSchema.statics.updateAccount = async function(id, info) {
+    // validation
+    if (!info.Name || !info.Type || !info.Desc || !info.Website || !info.Location) {
+        throw Error('Please fill out all the fields')
+    }
+    if (!validator.isURL(info.Website)) {
+        throw Error('Invalid Website URL')
+    }
+
+    const organization = await this.findByIdAndUpdate(id, info)
+    if (!organization) {
+        throw Error('Unable to update account')
     }
 
     return organization

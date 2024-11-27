@@ -1,14 +1,27 @@
 const express = require('express');
 
 const { 
-    register, 
-    login 
+    register, login, updateAccount,
+    getPrivateInfo,
+    getPublicInfo,
+    getAll
+    // subscribe,
+    // unsubscribe
 } = require('../controllers/organizationController')
 
 const router = express.Router();
 
 router.post('/register', register)
 router.post('/login', login)
+router.patch('/account/:id', updateAccount)
+router.get('/account/:id', getPrivateInfo)
+
+router.get('/:id', getPublicInfo)
+router.get('/', getAll)
+
+
+// router.post('/subscribe/:id', subscribe)
+// router.post('/unsubscibe/:id', unsubscribe)
 
 module.exports = router
 
@@ -57,6 +70,9 @@ module.exports = router
 
 //         res.send(org);
 //     });
+
+
+
 
 //     // subscribe to newsletter
 //     route.post('/subscribe', async (req, res) => {
@@ -109,6 +125,9 @@ module.exports = router
 //             success: 'Subscribed'
 //         });
 //     });
+
+
+
 
 //     // unsubscribe from newsletter
 //     route.post('/unsubscribe', async (req, res) => {
