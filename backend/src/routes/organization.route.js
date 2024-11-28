@@ -18,7 +18,6 @@ router.get('/public/:id', getPublicInfo)
 router.get('/public', getAll)
 
 // Protected account routes
-
 router.get('/account', getAccount)
 router.patch('/account', updateAccount)
 
@@ -30,52 +29,6 @@ module.exports = router
 // ----- YET TO BE REFACTORED ----- //
 
 // module.exports = function (app) {
-//     //
-//     // get organization profile by either name, email, or id
-//     route.get('/profile', async (req, res) => {
-//         let {name, email, id} = req.query;
-//         if (!name && !email && !id) {
-//             return res.status(400).send({
-//                 error: 'Invalid parameters'
-//             });
-//         }
-
-//         let org;
-//         if (name) {
-//             org = await orgModel.findOne({
-//                 Name: {
-//                     $regex: name,
-//                     $options: 'i'
-//                 }
-//             }, {
-//                 Password: 0
-//             }).exec();
-//         } else if (email) {
-//             org = await orgModel.findOne({
-//                 Email: email
-//             }, {
-//                 Password: 0
-//             }).exec();
-//         } else {
-//             org = await orgModel.findOne({
-//                 _id: id
-//             }, {
-//                 Password: 0
-//             }).exec();
-//         }
-
-//         if (!org) {
-//             return res.status(400).send({
-//                 error: 'Organization not found'
-//             });
-//         }
-
-//         res.send(org);
-//     });
-
-
-
-
 //     // subscribe to newsletter
 //     route.post('/subscribe', async (req, res) => {
 //         let {orgID} = req.body;
@@ -127,7 +80,6 @@ module.exports = router
 //             success: 'Subscribed'
 //         });
 //     });
-
 
 
 
@@ -195,6 +147,48 @@ module.exports = router
 
 
     // ----- REFACTORED ----- //
+
+    //     // get organization profile by either name, email, or id
+//     route.get('/profile', async (req, res) => {
+//         let {name, email, id} = req.query;
+//         if (!name && !email && !id) {
+//             return res.status(400).send({
+//                 error: 'Invalid parameters'
+//             });
+//         }
+
+//         let org;
+//         if (name) {
+//             org = await orgModel.findOne({
+//                 Name: {
+//                     $regex: name,
+//                     $options: 'i'
+//                 }
+//             }, {
+//                 Password: 0
+//             }).exec();
+//         } else if (email) {
+//             org = await orgModel.findOne({
+//                 Email: email
+//             }, {
+//                 Password: 0
+//             }).exec();
+//         } else {
+//             org = await orgModel.findOne({
+//                 _id: id
+//             }, {
+//                 Password: 0
+//             }).exec();
+//         }
+
+//         if (!org) {
+//             return res.status(400).send({
+//                 error: 'Organization not found'
+//             });
+//         }
+
+//         res.send(org);
+//     });
 
     // register organization
     // publicRoute.post('/register', async (req, res) => {

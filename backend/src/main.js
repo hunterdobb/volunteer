@@ -21,8 +21,8 @@ app.use((req, res, next) => { console.log(req.path, req.method); next() })
 
 // routes
 app.use('/api/organization', organizationRoutes);
-app.use('api/event', eventRoutes)
-// app.use('api/volunteer', volunteerRoutes)
+app.use('/api/event', eventRoutes)
+// app.use('/api/volunteer', volunteerRoutes)
 
 // connect to db
 mongoose.connect(process.env.MONGO_URI)
