@@ -25,14 +25,14 @@ const createEvent = async (req, res) => {
 };
 
 // get all the events matching the organization id. (newest to oldest)
-const getEventsForOrganization = async (req, res) => {
+const getOrganizationEvents = async (req, res) => {
     const { id } = req.params
     const events = await Event.find({ OrgID: id }).sort({ createdAt: -1 })
     res.status(200).json(events)
 }
 
 // (newest to oldest)
-const getAll = async (req, res) => {
+const getAllEvents = async (req, res) => {
     const events = await Event.find().sort({ createdAt: -1 })
     res.status(200).json(events)
 }
@@ -59,12 +59,32 @@ const deleteEvent = async (req, res) => {
 
     const event = await Event.findByIdAndDelete(id)
     if (!event) {
-        return res.status(400).json({ error: 'No event found' })
+        return res.status(400).json({ error: 'Unable to delete the event' })
+    }
+
+    res.status(200).json(event)
+}
+
+// update a event
+const updateEvent = async (req, res) => {
+    const { id } = req.params
+    if (!mongoose.isValidObjectId(id)) {
+        return res.status(404).json({ error: 'No event found' })
+    }
+
+    const event = await Event.findByIdAndUpdate(id, { ...req.body })
+    if (!event) {
+        return res.status(400).json({ error: 'Unable to update the event' })
     }
 
     res.status(200).json(event)
 }
 
 module.exports = {
-    createEvent, getEventsForOrganization, getAll, getSingleEvent, deleteEvent
+    createEvent, 
+    getOrganizationEvents, 
+    getAllEvents, 
+    getSingleEvent, 
+    deleteEvent, 
+    updateEvent
 };

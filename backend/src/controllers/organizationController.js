@@ -12,15 +12,13 @@ const login = async (req, res) => {
 
   try {
     const organization = await Organization.login(email, password);
-
-    // create a token
     const token = createToken(organization._id)
-
     res.status(200).json({ email, token })
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
 }
+
 
 // signup organization
 const register = async (req, res) => {
@@ -38,7 +36,8 @@ const register = async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
-};
+}
+
 
 // get account info
 const getAccount = async (req, res) => {
@@ -50,11 +49,12 @@ const getAccount = async (req, res) => {
   res.status(200).json(organization)
 }
 
+
 // get public info (not including login info)
 const getPublicInfo = async (req, res) => {
   const { id } = req.params
   if (!mongoose.isValidObjectId(id)) {
-    return res.status(404).json({ error: 'No organization found' })
+    return res.status(404).json({ error: 'Invalid organization id' })
   }
 
   const organization = await Organization.findOne({ _id: id }, { Email: 0, Password: 0, _id: 0, Volunteers: 0 })
@@ -65,15 +65,14 @@ const getPublicInfo = async (req, res) => {
   res.status(200).json(organization)
 }
 
+
 // get public info (not including login info)
 const getAll = async (req, res) => {
   const all = await Organization.find({}, { Email: 0, Password: 0, _id: 0, Volunteers: 0 })
-  if (!all) {
-    return res.status(404).json({ error: 'No organizations found' })
-  }
-
+  if (!all) { return res.status(404).json({ error: 'No organizations found' }) }
   res.status(200).json(all)
 }
+
 
 // update account info
 const updateAccount = async (req, res) => {
@@ -85,12 +84,6 @@ const updateAccount = async (req, res) => {
   }
 }
 
-// const getEvents = async (req, res) => {
-//   const org_id = req.organizationUser._id
-
-//   const events = await
-// }
-
 module.exports = {
   login,
   register,
@@ -98,5 +91,4 @@ module.exports = {
   updateAccount,
   getPublicInfo,
   getAll
-  // getEvents
 };
