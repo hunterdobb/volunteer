@@ -6,7 +6,7 @@ const orgRequireAuth = async (req, res, next) => {
     const { authorization } = req.headers
 
     if (!authorization) {
-        return res.status(401).json({error: 'Not authorized'})
+        return res.status(401).json({ error: 'Not authorized' })
     }
 
     const token = authorization.split(' ')[1]
@@ -18,7 +18,7 @@ const orgRequireAuth = async (req, res, next) => {
         next()
     } catch (error) {
         console.log(error)
-        res.status(401).json({error: 'Not authorized'})
+        res.status(401).json({ error: 'Not authorized' })
     }
 }
 

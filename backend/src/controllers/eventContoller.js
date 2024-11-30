@@ -24,7 +24,7 @@ const createEvent = async (req, res) => {
     }
 };
 
-// get all the events matching the organization id. (newest to oldest)
+// get all the events matching an organization id. (newest to oldest)
 const getOrganizationEvents = async (req, res) => {
     const { id } = req.params
     const events = await Event.find({ OrgID: id }).sort({ createdAt: -1 })

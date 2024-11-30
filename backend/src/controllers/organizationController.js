@@ -8,12 +8,12 @@ const createToken = (_id) => {
 
 // login organization
 const login = async (req, res) => {
-  const { email, password } = req.body
+  const { Email, Password } = req.body
 
   try {
-    const organization = await Organization.login(email, password);
+    const organization = await Organization.login(Email, Password);
     const token = createToken(organization._id)
-    res.status(200).json({ email, token })
+    res.status(200).json({ email: Email, token })
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
@@ -28,36 +28,23 @@ const register = async (req, res) => {
     const organization = await Organization.register(
       Email, Password, Name, Type, Category, Desc, Website, Location
     );
-
-    // create jwt
     const token = createToken(organization._id)
-
-    res.status(200).json({ Email, token })
+    res.status(200).json({ email: Email, token })
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
 }
 
 
-// get account info
-const getAccount = async (req, res) => {
-  const organization = await Organization.findById(req.organizationUser._id)
-  if (!organization) {
-    return res.status(404).json({ error: 'No organization found' })
-  }
-
-  res.status(200).json(organization)
-}
-
-
 // get public info (not including login info)
-const getPublicInfo = async (req, res) => {
-  const { id } = req.params
-  if (!mongoose.isValidObjectId(id)) {
+const getOrganization = async (req, res) => {
+  const { _id } = req.params
+  if (!mongoose.isValidObjectId(_id)) {
+    console.log(_id)
     return res.status(404).json({ error: 'Invalid organization id' })
   }
 
-  const organization = await Organization.findOne({ _id: id }, { Email: 0, Password: 0, _id: 0, Volunteers: 0 })
+  const organization = await Organization.findOne({ _id }, { Password: 0 })
   if (!organization) {
     return res.status(404).json({ error: 'No organization found' })
   }
@@ -67,8 +54,8 @@ const getPublicInfo = async (req, res) => {
 
 
 // get public info (not including login info)
-const getAll = async (req, res) => {
-  const all = await Organization.find({}, { Email: 0, Password: 0, _id: 0, Volunteers: 0 })
+const getAllOrganizations = async (req, res) => {
+  const all = await Organization.find({}, { Password: 0 })
   if (!all) { return res.status(404).json({ error: 'No organizations found' }) }
   res.status(200).json(all)
 }
@@ -87,8 +74,7 @@ const updateAccount = async (req, res) => {
 module.exports = {
   login,
   register,
-  getAccount,
   updateAccount,
-  getPublicInfo,
-  getAll
+  getOrganization,
+  getAllOrganizations
 };

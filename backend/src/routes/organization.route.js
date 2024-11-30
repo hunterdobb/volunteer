@@ -1,28 +1,28 @@
 const express = require('express');
 
 const { 
-    register, login, updateAccount, getAccount, getPublicInfo, getAll
+    register, login, updateAccount, getOrganization, getAllOrganizations
     // subscribe,
     // unsubscribe
 } = require('../controllers/organizationController')
 
-const requireAuth = require('../middleware/orgRequireAuth')
+const orgRequireAuth = require('../middleware/orgRequireAuth')
+// const volRequireAuth = require('../middleware/volRequireAuth')
 
 const router = express.Router();
-router.use('/account', requireAuth);
 
 // Public routes
 router.post('/register', register)
 router.post('/login', login)
-router.get('/public/:id', getPublicInfo)
-router.get('/public', getAll)
+router.get('/:_id', getOrganization)
+router.get('/', getAllOrganizations)
 
-// Protected account routes
-router.get('/account', getAccount)
-router.patch('/account', updateAccount)
+// Protected routes
+router.patch('/', orgRequireAuth, updateAccount)
 
-// router.post('/subscribe/:id', subscribe)
-// router.post('/unsubscibe/:id', unsubscribe)
+// TODO
+// router.post('/subscribe/:org_id', subscribe)
+// router.post('/unsubscibe/:org_id', unsubscribe)
 
 module.exports = router
 

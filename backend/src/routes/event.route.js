@@ -7,17 +7,15 @@ const orgRequireAuth = require('../middleware/orgRequireAuth')
 
 const router = express.Router()
 
-// routes start with: '/api/event' setup in main.js
+// public routes
+router.get('/', getAllEvents)
+router.get('/single/:id', getSingleEvent)
+router.get('/organization/:id', getOrganizationEvents)
 
 // routes that require jwt auth (must be logged in with correct org. account)
 router.post('/', orgRequireAuth, createEvent)
 router.delete('/:id', orgRequireAuth, deleteEvent)
 router.patch('/:id', orgRequireAuth, updateEvent)
-
-// public routes
-router.get('/', getAllEvents)
-router.get('/single/:id', getSingleEvent)
-router.get('/organization/:id', getOrganizationEvents)
 
 module.exports = router
 
