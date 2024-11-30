@@ -9,6 +9,7 @@ const mongoose = require("mongoose");
 const organizationRoutes = require('./routes/organization.route')
 const eventRoutes = require('./routes/event.route')
 const volunteerRoutes = require('./routes/volunteer.route')
+const startCronJobs = require('./controllers/cronController')
 
 const app = express();
 
@@ -30,5 +31,6 @@ mongoose.connect(process.env.MONGO_URI)
         app.listen(process.env.PORT, () => {
             console.log('connected to db & listening on port', process.env.PORT)
         })
+        startCronJobs();
     })
     .catch((error) => { console.log(error) })

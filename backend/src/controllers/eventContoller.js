@@ -1,4 +1,7 @@
 const Event = require('../models/event.model')
+const Organization = require('../models/organization.model')
+const Volunteer = require('../models/volunteer.model')
+const { sendEventEmail } = require('./emailController')
 const mongoose = require('mongoose')
 
 // let organizations create events
@@ -19,6 +22,16 @@ const createEvent = async (req, res) => {
             EndTime, StartTime, Volunteers: []
         })
         res.status(200).json(event)
+
+        // send email to all volunteers (subscribers) of the organization
+        /*
+        const org = await Organization.findById(org_id);
+        const volunteers = await org.Volunteers; // subscribers
+        await Promise.all(volunteers.map(async (volunteer) => {
+            await sendEventEmail(volunteer.Email, event, org);
+            await new Promise((resolve) => setTimeout(resolve, 200));
+        }));*/
+
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -36,6 +49,7 @@ const getAllEvents = async (req, res) => {
     const events = await Event.find().sort({ createdAt: -1 })
     res.status(200).json(events)
 }
+
 
 const getSingleEvent = async (req, res) => {
     const { id } = req.params
@@ -80,11 +94,22 @@ const updateEvent = async (req, res) => {
     res.status(200).json(event)
 }
 
+const getTodaysEvents = async () => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+    console.log(today, tomorrow);
+    let events = await Event.find({ StartTime: { $gte: today, $lt: tomorrow } })
+    return events;
+}
+
 module.exports = {
     createEvent, 
     getOrganizationEvents, 
     getAllEvents, 
     getSingleEvent, 
     deleteEvent, 
-    updateEvent
+    updateEvent,
+    getTodaysEvents
 };
