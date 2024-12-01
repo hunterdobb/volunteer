@@ -54,8 +54,8 @@ jobs:
           PORT: ${{ secrets.PORT }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-        script: |
-          cd /opt/bitnami/projects/volunteer
-          git pull origin main
-          npm install --prefix backend
-          pm2 restart all
+          script: |
+            cd /opt/bitnami/projects/volunteer
+            git pull origin main
+            npm install --prefix backend
+            pm2 restart all
