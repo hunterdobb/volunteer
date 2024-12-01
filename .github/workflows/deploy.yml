@@ -51,7 +51,6 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           env:
-            NODE_ENV: ${{ secrets.NODE_ENV }}
             PORT: ${{ secrets.PORT }}
             MONGO_URI: ${{ secrets.MONGO_URI }}
             JWT_SECRET: ${{ secrets.JWT_SECRET }}
