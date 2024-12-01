@@ -62,6 +62,6 @@ jobs:
             pm2 restart all
 
       - name: Debug Secrets
-      run: |
-        echo "HOST: ${{ secrets.HOST }}"
-        echo "USER: ${{ secrets.USER }}"
+        run: |
+          echo "HOST: ${{ secrets.HOST }}"
+          echo "USER: ${{ secrets.USER }}"
