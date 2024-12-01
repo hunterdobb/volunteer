@@ -4,21 +4,27 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const LoginOrg: React.FC = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [Email, setEmail] = useState('');
+    const [Password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleLogin = async (e: React.FormEvent) => {
       e.preventDefault();
       try {
-        const response = await axios.post('http://localhost:5000/api/organization/login', { email, password }); 
-        const { role } = response.data; 
+        const response = await axios.post('http://localhost:5000/api/organization/login', { Email, Password }); 
         
+        const { role } = response.data; 
+        const { token } = response.data; 
+
+        // Save the token to localStorage
+        localStorage.setItem('token', token);
+
+                
         if (role === 'organization') {
           navigate('/organizations/login');
         } else {
-          navigate('/volunteers/login');
+          navigate('/organization');
         }
       } catch (err) {
         setError('Invalid email or password.');
@@ -34,7 +40,7 @@ const LoginOrg: React.FC = () => {
             <label>Email:</label>
             <input
               type="email"
-              value={email}
+              value={Email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -43,7 +49,7 @@ const LoginOrg: React.FC = () => {
             <label>Password:</label>
             <input
               type="password"
-              value={password}
+              value={Password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />

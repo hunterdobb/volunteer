@@ -6,7 +6,7 @@ import LoginOrg from './LoginOrg';
 import RegisterOrg from './RegisterOrg';
 import LoginVolunteer from './LoginVolunteer';
 import RegisterVolunteer from './RegisterVolunteer';
-
+import OrganizationHome from './pages/OrganizationHome';
 
 const App = () => {
   return (
@@ -17,6 +17,7 @@ const App = () => {
         <Route path="/organization/register" element={<RegisterOrg />} />
         <Route path="/volunteer/login" element={<LoginVolunteer />} />
         <Route path="/volunteer/register" element={<RegisterVolunteer />} />
+        <Route path="/organization" element={<OrganizationHome />} />   
       </Routes>
     </Router>
   );
