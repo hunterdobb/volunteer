@@ -7,7 +7,8 @@ const RegisterVolunteer = () => {
   const [formData, setFormData] = useState({
     Email: '',
     Password: '',
-    Name: '',
+    FirstName: '',
+    LastName: '',
     Birthday: '',
   });
 
@@ -22,7 +23,16 @@ const RegisterVolunteer = () => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/volunteer/register', formData);
+
+      // Convert Birthday format to the expected formatby the database
+      const formattedBirthday = new Date(`${formData.Birthday}T00:00:00.000Z`).toISOString();
+
+      // Create new form data with the formatted Birthday
+      const updatedFormData = {
+        ...formData,
+        Birthday: formattedBirthday,
+    };
+      await axios.post('http://localhost:5000/api/volunteer/register', updatedFormData);
       navigate('/volunteer/login'); // Redirect to login page after successful registration
     } catch (err) {
       setError('Failed to register. Please try again.');
@@ -54,15 +64,25 @@ const RegisterVolunteer = () => {
           />
         </div>
         <div>
-          <label>Name:</label>
+          <label>First Name:</label>
           <input
             type="text"
-            name="Name"
-            value={formData.Name}
+            name="FirstName"
+            value={formData.FirstName}
             onChange={handleChange}
             required
           />
         </div>
+        <div>
+          <label>Last Name:</label>
+          <input
+            type="text"
+            name="LastName"
+            value={formData.LastName}
+            onChange={handleChange}
+            required
+          />
+        </div> 
         <div>
           <label>Birthday:</label>
           <input
