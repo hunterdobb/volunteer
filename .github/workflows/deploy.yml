@@ -45,10 +45,11 @@ jobs:
 
       # Step 7: Deploy to AWS Lightsail
       - name: Deploy to AWS Lightsail
-        uses: appleboy/ssh-action@v0.1.8
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
           key: ${{ secrets.INPUT_KEY }}
         env:
           PORT: ${{ secrets.PORT }}
