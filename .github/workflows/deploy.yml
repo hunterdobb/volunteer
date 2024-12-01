@@ -43,6 +43,11 @@ jobs:
         run: |
           cp -r frontend/dist/* backend/public/
 
+      - name: Debug Secrets
+        run: |
+          echo "HOST: ${{ secrets.HOST }}"
+          echo "USER: ${{ secrets.USER }}"
+
       # Step 7: Deploy to AWS Lightsail
       - name: Deploy to AWS Lightsail
         uses: appleboy/ssh-action@v1.2.0
@@ -61,7 +66,3 @@ jobs:
             npm install --prefix backend
             pm2 restart all
 
-      - name: Debug Secrets
-        run: |
-          echo "HOST: ${{ secrets.HOST }}"
-          echo "USER: ${{ secrets.USER }}"
