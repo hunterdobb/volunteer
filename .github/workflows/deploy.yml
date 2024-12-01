@@ -60,3 +60,8 @@ jobs:
             git pull origin main
             npm install --prefix backend
             pm2 restart all
+
+      - name: Debug Secrets
+      run: |
+        echo "HOST: ${{ secrets.HOST }}"
+        echo "USER: ${{ secrets.USER }}"
