@@ -50,12 +50,12 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
-          env:
-            PORT: ${{ secrets.PORT }}
-            MONGO_URI: ${{ secrets.MONGO_URI }}
-            JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          script: |
-            cd /opt/bitnami/projects/volunteer
-            git pull origin main
-            npm install --prefix backend
-            pm2 restart all
+        env:
+          PORT: ${{ secrets.PORT }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        script: |
+          cd /opt/bitnami/projects/volunteer
+          git pull origin main
+          npm install --prefix backend
+          pm2 restart all
