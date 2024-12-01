@@ -1,0 +1,82 @@
+name: Deploy MERN App to AWS Lightsail
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: Check out the code from the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Step 3: Install dependencies for Backend
+      - name: Install dependencies for Backend
+        run: |
+          cd backend
+          npm install
+
+      # Step 4: Install dependencies for Frontend
+      - name: Install dependencies for Frontend
+        run: |
+          cd frontend
+          npm install
+
+      # Step 5: Build Frontend
+      - name: Build Frontend
+        run: |
+          cd frontend
+          npm run build
+
+      # Step 6: Copy frontend build to backend's public directory
+      - name: Copy frontend build to backend
+        run: |
+          cp -r frontend/dist/* backend/public/
+
+      - name: Debug Secrets
+        run: |
+          echo "HOST: ${{ secrets.HOST }}"
+          echo "USER: ${{ secrets.USER }}"
+
+      - name: Debug secret presence
+        run: |
+          if [ -z "${{ secrets.HOST }}" ]; then
+            echo "HOST is not set"
+          else
+            echo "HOST is set"
+          fi
+
+          if [ -z "${{ secrets.USER }}" ]; then
+            echo "USER is not set"
+          else
+            echo "USER is set"
+          fi
+
+      # Step 7: Deploy to AWS Lightsail
+      - name: Deploy to AWS Lightsail
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.INPUT_KEY }}
+        env:
+          PORT: ${{ secrets.PORT }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          script: |
+            cd /opt/bitnami/projects/volunteer
+            git pull origin main
+            npm install --prefix backend
+            pm2 restart all
+
