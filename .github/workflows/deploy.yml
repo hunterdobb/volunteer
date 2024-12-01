@@ -48,6 +48,20 @@ jobs:
           echo "HOST: ${{ secrets.HOST }}"
           echo "USER: ${{ secrets.USER }}"
 
+      - name: Debug secret presence
+        run: |
+          if [ -z "${{ secrets.HOST }}" ]; then
+            echo "HOST is not set"
+          else
+            echo "HOST is set"
+          fi
+
+          if [ -z "${{ secrets.USER }}" ]; then
+            echo "USER is not set"
+          else
+            echo "USER is set"
+          fi
+
       # Step 7: Deploy to AWS Lightsail
       - name: Deploy to AWS Lightsail
         uses: appleboy/ssh-action@v1.2.0
