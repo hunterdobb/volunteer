@@ -21,6 +21,19 @@ app.use((req, res, next) => { console.log(req.path, req.method); next() })
 //app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded (if needed)
 app.use(express.static('public')); // Serve static files
 
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    );
+    res.setHeader(
+        'Access-Control-Allow-Methods',
+        'GET, POST, PATCH, DELETE, OPTIONS'
+    );
+    next();
+});
+
 // routes
 app.use('/api/organization', organizationRoutes);
 app.use('/api/event', eventRoutes)
