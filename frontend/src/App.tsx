@@ -8,6 +8,7 @@ import LoginVolunteer from './LoginVolunteer';
 import RegisterVolunteer from './RegisterVolunteer';
 import OrganizationHome from './pages/OrganizationHome';
 import VolunteerHome from './pages/VolunteerHome';
+import EventCard from './components/EventCard';
 
 const App = () => {
   return (
@@ -19,7 +20,8 @@ const App = () => {
         <Route path="/volunteer/login" element={<LoginVolunteer />} />
         <Route path="/volunteer/register" element={<RegisterVolunteer />} />
         <Route path="/organization" element={<OrganizationHome />} />   
-        <Route path="/volunteer" element={<VolunteerHome />} />      
+        <Route path="/volunteer" element={<VolunteerHome />} />
+        <Route path="/volunteer/event" element={<EventCard />} />       
       </Routes>
     </Router>
   );
