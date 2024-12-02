@@ -46,8 +46,12 @@ const VolunteerHome: React.FC = () => {
               onClick={() => console.log()}
             >
               <Link
-                to="/volunteer/event"
+                to= {{
+                    pathname: "/volunteer/event/{post._id}", 
+                    state: {id: post} 
+                }}
                 style={{ color: "#0b0b0b", textDecoration: "none" }}
+                onClick={() => post._id}
               >
                 {post.Title}
               </Link>
