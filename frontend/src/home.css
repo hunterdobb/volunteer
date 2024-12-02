@@ -1,19 +1,19 @@
 /* General styling for the Home page container */
 .home-container {
     text-align: center;
-    max-width: 600px;
+    max-width: 500px;
     margin: 50px auto;
     padding: 40px;
     background-color: #80acd2; /* Light blue for the container background */
     border: 3px solid #a2bbd5; /* Blue border for emphasis */
-    border-radius: 12px;
+    border-radius: 15px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 /* Page heading styling */
 .home-container h1 {
     font-family: Garamond, serif;
-    font-size: 28px;
+    font-size: 35px;
     margin-bottom: 20px;
     color: #333;
 }
@@ -23,21 +23,28 @@
     display: flex;
     justify-content: space-around;
     margin-top: 30px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Individual option card styling */
 .option {
     text-align: center;
-    background-color: #c7c3ca; /* White background for each option */
-    padding: 20px;
+    background-color: #9a87a8;
+    padding: 25px;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 35%; /* Adjust width for a balanced layout */
+    width: 50%; /* Adjust width for a balanced layout */
     cursor: pointer;
     position: relative; /* Needed for dropdown menu positioning */
 }
 
 .option h2 {
+    /*border: 1px solid red;*/ /* Debugging border */
+    padding: 10px;
+    cursor: pointer;
     font-size: 20px;
     font-style: italic;
     color: #0e0e0e;
@@ -46,32 +53,33 @@
 }
 
 .option h2:hover {
-    color: #003d80;
+    color: #4a6179;
 }
 
 /* Dropdown menu styling */
 .dropdown-menu {
-    position: absolute;
-    top: 60px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #c7c3ca;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    padding: 10px;
-    z-index: 10;
+    position: absolute; /* Ensures dropdown is positioned relative to its parent */
+    top: 100%; /* Positions the dropdown below the parent container */
+    left: 50%; /* Centers the dropdown horizontally */
+    transform: translateX(-50%); /* Fine-tunes horizontal centering */
+    background-color: #c7c3ca; /* Matches your intended background color */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow for depth */
+    border-radius: 12px; /* Smooth, rounded corners */
+    padding: 10px; /* Adds internal spacing */
+    z-index: 1000; /* Ensures the dropdown appears above other elements */
+    width: 150px; /* Ensures consistent width for dropdown */
 }
 
+/* Links within the dropdown menu */
 .dropdown-menu a {
-    display: block;
-    text-decoration: none;
-    color: #0b0b0b;
-    font-weight: lighter;
-    padding: 8px 12px;
-    transition: background-color 0.3s, color 0.3s;
+    display: block; /* Makes each link occupy full width */
+    text-decoration: none; /* Removes underline from links */
+    color: #0b0b0b; /* Sets link text color */
+    padding: 8px 12px; /* Adds padding for better clickability */
+    transition: background-color 0.3s, color 0.3s; /* Adds smooth hover transitions */
 }
 
 .dropdown-menu a:hover {
-    background-color: #0056b3;
-    color: #ffffff;
+    background-color: #344960; /* Changes background color on hover */
+    color: #ffffff; /* Changes text color on hover */
 }
