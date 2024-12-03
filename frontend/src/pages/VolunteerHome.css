@@ -64,7 +64,7 @@ General layout for the Volunteer Home
     margin: 5px 0;
   }
   
-  .registerButton,
+  /* .registerButton,
   .withdrawButton {
     justify-content: center;
     align-items: center;
@@ -86,7 +86,7 @@ General layout for the Volunteer Home
   .withdrawButton:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
-  }
+  } */
   
   .signed-up-events .event-card {
     width: 100%; 

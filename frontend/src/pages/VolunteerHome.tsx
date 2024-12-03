@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./VolunteerHome.css";
-import EventCard from "../components/EventCard"; // Import EventCard component
+import EventCard from "../components/EventCard";
 
 interface Event {
   _id: string;
@@ -37,77 +37,23 @@ const VolunteerHome: React.FC = () => {
     fetchEvents();
   }, []);
 
-  // Handle Sign Up for an event
-  const handleSignUp = async (event: Event) => {
-    if (!event._id) {
-      alert("Event ID is missing!");
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        alert("You must be logged in to sign up for an event!");
-        return;
-      }
-
-      const response = await axios.post(
-        `http://localhost:5000/api/event/${event._id}/signup`,
-        {},
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        setSignedUpEvents((prev) => [...prev, event]);
-        alert(`You have successfully signed up for: ${event.Title}`);
-      } else {
-        alert("Failed to sign up for the event.");
-      }
-    } catch (error) {
-      console.error("Error signing up for event:", error);
+  // Handle sign-up locally
+  const handleSignUp = (event: Event) => {
+    if (!signedUpEvents.some((e) => e._id === event._id)) {
+      setSignedUpEvents((prev) => [...prev, event]);
+      alert(`You signed up for: ${event.Title}`);
+    } else {
+      alert(`You are already signed up for: ${event.Title}`);
     }
   };
 
-  // Handle Withdraw from an event
-  const handleWithdraw = async (event: Event) => {
-    if (!event._id) {
-      alert("Event ID is missing!");
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        alert("You must be logged in to withdraw from an event!");
-        return;
-      }
-
-      const response = await axios.post(
-        `http://localhost:5000/api/event/${event._id}/withdraw`,
-        {},
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        setSignedUpEvents((prev) => prev.filter((e) => e._id !== event._id));
-        alert(`You have successfully withdrawn from: ${event.Title}`);
-      } else {
-        alert("Failed to withdraw from the event.");
-      }
-    } catch (error) {
-      console.error("Error withdrawing from event:", error);
+  // Handle withdrawal locally
+  const handleWithdraw = (event: Event) => {
+    if (signedUpEvents.some((e) => e._id === event._id)) {
+      setSignedUpEvents((prev) => prev.filter((e) => e._id !== event._id));
+      alert(`You withdrew from: ${event.Title}`);
+    } else {
+      alert(`You are not signed up for: ${event.Title}`);
     }
   };
 
@@ -141,22 +87,13 @@ const VolunteerHome: React.FC = () => {
             <div className="event-list">
               {signedUpEvents.length > 0 ? (
                 signedUpEvents.map((event) => (
-                  <div key={event._id} className="event-card">
-                    <h3>{event.Title}</h3>
-                    <p><strong>Date:</strong> {event.Date}</p>
-                    <p><strong>Location:</strong> {event.Location}</p>
-                    <p><strong>Volunteers Needed:</strong> {event.VolsNeeded}</p>
-                    <p><strong>Current Volunteers:</strong> {event.CurrentVols}</p>
-                    <p>{event.Description}</p>
-                    <p><strong>Time:</strong> {event.StartTime} - {event.EndTime}</p>
-
-                    <button
-                      className="withdrawButton"
-                      onClick={() => handleWithdraw(event)}
-                    >
-                      Withdraw
-                    </button>
-                  </div>
+                  <EventCard
+                    key={event._id}
+                    event={event}
+                    onSignUp={handleSignUp}
+                    signedUp
+                    onWithdraw={handleWithdraw}
+                  />
                 ))
               ) : (
                 <p>You haven't signed up for any events yet.</p>

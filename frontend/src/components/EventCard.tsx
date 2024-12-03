@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 interface Event {
   _id: string;
@@ -30,13 +30,13 @@ const EventCard: React.FC<EventCardProps> = ({ event, onSignUp, onWithdraw, sign
       <p>{event.Description}</p>
       <p><strong>Time:</strong> {event.StartTime} - {event.EndTime}</p>
 
-      {!signedUp ? (
-        <button className="registerButton" onClick={() => onSignUp(event)}>
-          Sign Up
-        </button>
-      ) : (
+      {signedUp ? (
         <button className="withdrawButton" onClick={() => onWithdraw(event)}>
           Withdraw
+        </button>
+      ) : (
+        <button className="registerButton" onClick={() => onSignUp(event)}>
+          Sign Up
         </button>
       )}
     </div>
