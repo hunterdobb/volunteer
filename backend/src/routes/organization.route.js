@@ -142,10 +142,6 @@ module.exports = router
 
 
 
-
-
-
-
     // ----- REFACTORED ----- //
 
     //     // get organization profile by either name, email, or id
@@ -189,52 +185,3 @@ module.exports = router
 
 //         res.send(org);
 //     });
-
-    // register organization
-    // publicRoute.post('/register', async (req, res) => {
-    //     let {email, password, name, type, category, info, website, location} = req.body;
-    //     if (!email || !password || !name || !type || !category || !info || !website || !location) {
-    //         return res.status(400).send({
-    //             error: 'Invalid parameters'
-    //         });
-    //     }
-
-    //     // check if email is already in use
-    //     let org = await orgModel.findOne({
-    //         Email: email
-    //     }).exec();
-    //     if (org) {
-    //         return res.status(400).send({
-    //             error: 'Email already in use'
-    //         });
-    //     }
-
-    //     // todo: encrypt password
-
-    //     await orgModel.create({
-    //         Email: email,
-    //         Password: password,
-    //         Name: name,
-    //         Type: type,
-    //         Category: category,
-    //         Desc: info,
-    //         Website: website,
-    //         Location: location
-    //     }).catch(err => {
-    //         console.log(err);
-    //         return res.status(500).send({
-    //             error: 'Error registering organization'
-    //         });
-    //     })
-    //     res.send({
-    //         success: 'Organization registered'
-    //     });
-    // });
-
-    // login organization
-    // publicRoute.post('/login', async (req, res) => {
-    //     let {email, password} = req.body;
-    //     // todo: login logic
-    //     res.send('org login route');
-    // });
-// }
