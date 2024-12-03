@@ -183,28 +183,6 @@ module.exports = router
 //         });
 //     });
 
-
-
-//     // get all events
-//     route.get('/', async (req, res) => {
-//         let events = await eventModel.find({
-//             VolsNeeded: {
-//                 $gt: 0
-//             }
-//         }, {
-//             Title: 1,
-//             Description: 1,
-//             Location: 1,
-//             Date: 1,
-//             StartTime: 1,
-//             EndTime: 1,
-//             VolsNeeded: 1,
-//             CurrentVols: 1,
-//             OrgID: 1
-//         }).exec();
-//         res.send(events);
-//     });
-
 //     app.use('/events', publicRoute);
 //     app.use('/events', [sessionMiddleware], route);
 // }

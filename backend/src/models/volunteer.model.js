@@ -88,12 +88,6 @@ volunteerSchema.statics.login = async function (Email, Password) {
 
 // UPDATE
 volunteerSchema.statics.updateAccount = async function (id, vol) {
-    // const { experience, interests, location, preference, skills } = req.body;
-    // validation
-    // if (!vol.FirstName || !vol.LastName || !vol.Birthday) {
-    //     throw Error('Name and birthday are required')
-    // }
-
     const volunteer = await this.findByIdAndUpdate(id, vol)
     if (!volunteer) { throw Error('Unable to update account') }
     return volunteer
