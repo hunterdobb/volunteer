@@ -1,65 +1,170 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
 import "./VolunteerHome.css";
-import EventCard from "../components/EventCard";
+import EventCard from "../components/EventCard"; // Import EventCard component
 
-interface Post {
+interface Event {
   _id: string;
   Title: string;
-  OrgID: string;
+  Location: string;
+  Date: string;
+  Description: string;
+  VolsNeeded: number;
+  CurrentVols: number;
+  StartTime: string;
+  EndTime: string;
 }
 
 const VolunteerHome: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [signedUpEvents, setSignedUpEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Get All events (change later for filters or requirements)
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchEvents = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/event/");
-        if (!response.ok) {
-          throw new Error(`Error status: ${response.status}`);
-        }
-        const data = (await response.json()) as Post[];
-        setPosts(data);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
+        const response = await axios.get("http://localhost:5000/api/event");
+        setEvents(response.data);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching events:", err);
+        setError("Failed to load events. Please try again later.");
+        setLoading(false);
       }
     };
 
-    fetchPosts(); // Call the async function
-  }, []); // Empty dependency array to run the effect
+    fetchEvents();
+  }, []);
+
+  // Handle Sign Up for an event
+  const handleSignUp = async (event: Event) => {
+    if (!event._id) {
+      alert("Event ID is missing!");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("You must be logged in to sign up for an event!");
+        return;
+      }
+
+      const response = await axios.post(
+        `http://localhost:5000/api/event/${event._id}/signup`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setSignedUpEvents((prev) => [...prev, event]);
+        alert(`You have successfully signed up for: ${event.Title}`);
+      } else {
+        alert("Failed to sign up for the event.");
+      }
+    } catch (error) {
+      console.error("Error signing up for event:", error);
+    }
+  };
+
+  // Handle Withdraw from an event
+  const handleWithdraw = async (event: Event) => {
+    if (!event._id) {
+      alert("Event ID is missing!");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("You must be logged in to withdraw from an event!");
+        return;
+      }
+
+      const response = await axios.post(
+        `http://localhost:5000/api/event/${event._id}/withdraw`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setSignedUpEvents((prev) => prev.filter((e) => e._id !== event._id));
+        alert(`You have successfully withdrawn from: ${event.Title}`);
+      } else {
+        alert("Failed to withdraw from the event.");
+      }
+    } catch (error) {
+      console.error("Error withdrawing from event:", error);
+    }
+  };
 
   return (
-    <div>
-      <div>
-        <h1>Welcome to the Volunteer Hub</h1>
-        <p>Look for events.</p>
-      </div>
-      <div>
-        {posts.length === 0 && <p>No events found</p>}
-        <ul className="list-group">
-          {posts.map((post, index) => (
-            <li
-              className="list-group-item"
-              key={post._id}
-              onClick={() => console.log()}
-            >
-              <Link
-                to= {{
-                    pathname: "/volunteer/event/{post._id}", 
-                    state: {id: post} 
-                }}
-                style={{ color: "#0b0b0b", textDecoration: "none" }}
-                onClick={() => post._id}
-              >
-                {post.Title}
-              </Link>
-              - {post.OrgID}
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div className="volunteer-home">
+      <h1>Welcome to the Volunteer Hub</h1>
+      <p>Explore available events and sign up to make a difference!</p>
+
+      {loading && <p>Loading events...</p>}
+      {error && <p className="error">{error}</p>}
+
+      {!loading && !error && (
+        <div className="event-container">
+          <div className="available-events">
+            <h2>Available Events</h2>
+            <div className="event-list">
+              {events.map((event) => (
+                <EventCard
+                  key={event._id}
+                  event={event}
+                  onSignUp={handleSignUp}
+                  signedUp={signedUpEvents.some((e) => e._id === event._id)}
+                  onWithdraw={handleWithdraw}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="signed-up-events">
+            <h2>Signed Up Events</h2>
+            <div className="event-list">
+              {signedUpEvents.length > 0 ? (
+                signedUpEvents.map((event) => (
+                  <div key={event._id} className="event-card">
+                    <h3>{event.Title}</h3>
+                    <p><strong>Date:</strong> {event.Date}</p>
+                    <p><strong>Location:</strong> {event.Location}</p>
+                    <p><strong>Volunteers Needed:</strong> {event.VolsNeeded}</p>
+                    <p><strong>Current Volunteers:</strong> {event.CurrentVols}</p>
+                    <p>{event.Description}</p>
+                    <p><strong>Time:</strong> {event.StartTime} - {event.EndTime}</p>
+
+                    <button
+                      className="withdrawButton"
+                      onClick={() => handleWithdraw(event)}
+                    >
+                      Withdraw
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <p>You haven't signed up for any events yet.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
