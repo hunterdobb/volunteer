@@ -1,9 +1,12 @@
 const express = require('express');
 const {
-    createEvent, getOrganizationEvents, getAllEvents, getSingleEvent, deleteEvent, updateEvent
+    createEvent, getOrganizationEvents, getAllEvents, getSingleEvent, deleteEvent, updateEvent,
+    joinEvent, 
+    // leaveEvent
 } = require('../controllers/eventContoller')
 
 const orgRequireAuth = require('../middleware/orgRequireAuth')
+const volRequireAuth = require('../middleware/volRequireAuth')
 
 const router = express.Router()
 
@@ -16,96 +19,12 @@ router.get('/organization/:id', getOrganizationEvents)
 router.post('/', orgRequireAuth, createEvent)
 router.delete('/:id', orgRequireAuth, deleteEvent)
 router.patch('/:id', orgRequireAuth, updateEvent)
+router.post('/join/:eventID', volRequireAuth, joinEvent)
+// router.post('/leave/:eventID', volRequireAuth, leaveEvent)
 
 module.exports = router
 
 // module.exports = function (app) {
-//     // sign up for an event as volunteer
-//     route.post('/sign-up', async (req, res) => {
-//         let {eventID} = req.body;
-//         let volunteerEmail = req.session.email; // todo: replace with req.session.email
-//         if (!eventID) {
-//             return res.status(400).send({
-//                 error: 'Invalid parameters'
-//             });
-//         }
-//         let volunteer = await userModel.findOne({
-//             Email: volunteerEmail
-//         }).exec();
-//         if (!volunteer) {
-//             return res.status(400).send({
-//                 error: 'Volunteer not found'
-//             });
-//         }
-
-//         let event = await eventModel.findOne({
-//             _id: eventID
-//         }).exec();
-//         if (!event) {
-//             return res.status(400).send({
-//                 error: 'Event not found'
-//             });
-//         }
-
-//         if (!event.VolsNeeded) {
-//             return res.status(400).send({
-//                 error: 'Event is full'
-//             });
-//         }
-
-//         let volunteerId = volunteer._id;
-//         let org = await orgModel.findOne({
-//             _id: event.OrgID
-//         }).exec();
-//         if (!org) {
-//             return res.status(400).send({
-//                 error: 'Organization not found'
-//             });
-//         }
-//         // check if volunteer is already signed up
-//         let myEvents = volunteer.Events;
-//         if (myEvents.includes(eventID)) {
-//             return res.status(400).send({
-//                 error: 'Already signed up'
-//             });
-//         }
-
-//         myEvents.push(eventID); // if not, sign up
-//         await userModel.updateOne({
-//             Email: volunteerEmail
-//         }, {
-//             Events: myEvents
-//         }).catch(err => {
-//             console.log(err);
-//             return res.status(500).send({
-//                 error: 'Error signing up'
-//             });
-//         });
-//         // add volunteer to event
-//         let eventVolunteers = event.Volunteers;
-//         if (!eventVolunteers.includes(volunteerId)) {
-//             eventVolunteers.push(volunteerId);
-//             await eventModel.updateOne({
-//                 _id: event._id
-//             }, {
-//                 Volunteers: eventVolunteers,
-//                 CurrentVols: event.CurrentVols + 1,
-//                 VolsNeeded: event.VolsNeeded - 1
-//             }).catch(err => {
-//                 console.log(err);
-//                 return res.status(500).send({
-//                     error: 'Error signing up'
-//                 });
-//             });
-//         }
-
-
-//         res.send({
-//             success: 'Signed up'
-//         });
-//     });
-
-
 
 //     // cancel sign up for an organization as volunteer
 //     route.post('/leave', async (req, res) => {

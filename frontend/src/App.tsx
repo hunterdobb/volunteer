@@ -8,7 +8,7 @@ import LoginVolunteer from './LoginVolunteer';
 import RegisterVolunteer from './RegisterVolunteer';
 import OrganizationHome from './pages/OrganizationHome';
 import VolunteerHome from './pages/VolunteerHome';
-import EventCard from './components/EventCard';
+// import EventCard from './components/EventCard'; // TEMP COMMENT
 
 const App = () => {
   return (

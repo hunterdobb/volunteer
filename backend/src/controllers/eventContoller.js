@@ -38,12 +38,61 @@ const createEvent = async (req, res) => {
     }
 };
 
+
+// sign up for an event as volunteer
+const joinEvent = async (req, res) => {
+    const { eventID } = req.params
+    const vol_id = req.volunteerUser._id
+    if (!eventID) { return res.status(400).json({ error: 'Invalid parameters' }) }
+
+    const volunteer = await Volunteer.findOne({ _id: vol_id }, { Password: 0 })
+    if (!volunteer) { return res.status(404).json({ error: 'Volunteer not found' }) }
+
+    const event = await Event.findOne({ _id: eventID })
+    if (!event) { return res.status(404).json({ error: 'Event not found' }) }
+    if (event.VolsNeeded == 0) { return res.status(400).json({ error: 'Event is full' }); }
+
+    const organization = await Organization.findOne({ _id: event.OrgID })
+    if (!organization) { return res.status(404).json({ error: 'Organization not found' }) }
+
+    // check if volunteer is already signed up
+    const myEvents = volunteer.Events;
+    if (myEvents.includes(eventID)) { return res.status(400).json({ error: 'Already signed up' }) }
+
+    // add event to volunteers Events
+    myEvents.push(eventID);
+    try {
+        await Volunteer.updateOne({ _id: vol_id }, { Events: myEvents })
+    } catch (error) {
+        console.log(err);
+        return res.status(500).json({ error: 'Error joining event' })
+    }
+
+    // add volunteer to organizations event
+    const eventVolunteers = event.Volunteers;
+    if (!eventVolunteers.includes(vol_id)) {
+        eventVolunteers.push(vol_id);
+        await Event.updateOne({ _id: event._id }, {
+            Volunteers: eventVolunteers,
+            CurrentVols: event.CurrentVols + 1,
+            VolsNeeded: event.VolsNeeded - 1
+        }).catch(err => {
+            console.log(err);
+            return res.status(500).send({ error: 'Error signing up' })
+        })
+    }
+
+    res.send({ success: 'Signed up' });
+}
+
+
 // get all the events matching an organization id. (newest to oldest)
 const getOrganizationEvents = async (req, res) => {
     const { id } = req.params
     const events = await Event.find({ OrgID: id }).sort({ createdAt: -1 })
     res.status(200).json(events)
 }
+
 
 // (newest to oldest)
 const getAllEvents = async (req, res) => {
@@ -66,6 +115,7 @@ const getSingleEvent = async (req, res) => {
     res.status(200).json(event)
 }
 
+
 const deleteEvent = async (req, res) => {
     const { id } = req.params
     if (!mongoose.isValidObjectId(id)) {
@@ -80,7 +130,8 @@ const deleteEvent = async (req, res) => {
     res.status(200).json(event)
 }
 
-// update a event
+
+// update an event
 const updateEvent = async (req, res) => {
     const { id } = req.params
     if (!mongoose.isValidObjectId(id)) {
@@ -95,6 +146,7 @@ const updateEvent = async (req, res) => {
     res.status(200).json(event)
 }
 
+
 // get all events happening today
 const getTodaysEvents = async () => {
     const today = new Date()
@@ -106,6 +158,7 @@ const getTodaysEvents = async () => {
     return events;
 }
 
+
 // get all events that have already happened
 const getOldEvents = async () => {
     const today = new Date()
@@ -113,13 +166,15 @@ const getOldEvents = async () => {
     return await Event.find({ Date: { $lt: today } });
 }
 
+
 module.exports = {
-    createEvent, 
-    getOrganizationEvents, 
-    getAllEvents, 
-    getSingleEvent, 
-    deleteEvent, 
+    createEvent,
+    getOrganizationEvents,
+    getAllEvents,
+    getSingleEvent,
+    deleteEvent,
     updateEvent,
     getTodaysEvents,
-    getOldEvents
+    getOldEvents,
+    joinEvent
 };

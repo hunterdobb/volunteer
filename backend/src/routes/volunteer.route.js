@@ -17,6 +17,7 @@ router.get('/', getAllVolunteers)
 // Protected routes
 router.patch('/', volRequireAuth, updateAccount)
 
+
 module.exports = router
 
 
