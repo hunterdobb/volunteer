@@ -45,6 +45,9 @@ mongoose.connect(process.env.MONGO_URI)
         app.listen(process.env.PORT, () => {
             console.log('connected to db & listening on port', process.env.PORT)
         })
-        startCronJobs();
+        startCronJobs().then(() => {
+            console.log('cron Jobs started')
+        })
+
     })
     .catch((error) => { console.log(error) })

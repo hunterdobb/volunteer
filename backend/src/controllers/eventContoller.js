@@ -24,13 +24,14 @@ const createEvent = async (req, res) => {
         res.status(200).json(event)
 
         // send email to all volunteers (subscribers) of the organization
-        /*
+
         const org = await Organization.findById(org_id);
         const volunteers = await org.Volunteers; // subscribers
-        await Promise.all(volunteers.map(async (volunteer) => {
+        await Promise.all(volunteers.map(async (vol_id) => {
+            const volunteer = await Volunteer.findById(vol_id);
             await sendEventEmail(volunteer.Email, event, org);
             await new Promise((resolve) => setTimeout(resolve, 200));
-        }));*/
+        }));
 
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -94,6 +95,7 @@ const updateEvent = async (req, res) => {
     res.status(200).json(event)
 }
 
+// get all events happening today
 const getTodaysEvents = async () => {
     const today = new Date()
     today.setHours(0, 0, 0, 0)
@@ -104,6 +106,13 @@ const getTodaysEvents = async () => {
     return events;
 }
 
+// get all events that have already happened
+const getOldEvents = async () => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    return await Event.find({ Date: { $lt: today } });
+}
+
 module.exports = {
     createEvent, 
     getOrganizationEvents, 
@@ -111,5 +120,6 @@ module.exports = {
     getSingleEvent, 
     deleteEvent, 
     updateEvent,
-    getTodaysEvents
+    getTodaysEvents,
+    getOldEvents
 };

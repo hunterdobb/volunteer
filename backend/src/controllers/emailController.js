@@ -7,13 +7,27 @@ const emailConfig = {
     port: 465,
     secure: true,
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS
     }
 }
 
 const transporter = nodemailer.createTransport(emailConfig);
 
+
+const sendTestEmail = async (email) => {
+    let message = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Test Email',
+        text: 'This is a test email from the Volunteer Portal'
+    }
+    try {
+        await transporter.sendMail(message)
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 const sendEventEmail = async (email, event, organization) => {
     const htmlBody = `
@@ -44,11 +58,19 @@ const sendEventEmail = async (email, event, organization) => {
 const eventReminder = async (email, event, organization) => {
     const htmlBody = `
     <h1>Reminder: ${event.Title} is coming up!</h1>
-    <p>${event.Date}</p>
-    <p>Starts at ${new Date(event.StartTime).toLocaleDateString([], {
-        hour: '2-digit',
-        minute: '2-digit'
+    <p>${event.Description}</p>
+    <p>${new Date(event.Date).toLocaleDateString([], {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
     })}</p>
+    <p>Starting time: ${
+        new Date(event.StartTime).toLocaleDateString([], {
+            hour: '2-digit',
+            minute: '2-digit'
+        })
+    }</p>
     <p>Location: ${event.Location}</p>
     `
     let message = {
@@ -68,5 +90,6 @@ const eventReminder = async (email, event, organization) => {
 
 module.exports = {
     sendEventEmail,
-    eventReminder
+    eventReminder,
+    sendTestEmail
 }
