@@ -52,6 +52,14 @@ const getVolunteer = async (req, res) => {
   res.status(200).json(volunteer)
 }
 
+// get public info (not including password)
+const getVolunteerFromEmail = async (req, res) => {
+  const { Email } = req.params;
+  const volunteer = await Volunteer.findOne({ Email })
+  if (!volunteer) { return res.status(404).json({ error: 'No volunteer found' }) }
+
+  res.status(200).json(volunteer)
+}
 
 // get public info (not including password)
 const getAllVolunteers = async (req, res) => {
@@ -76,5 +84,6 @@ module.exports = {
   register,
   updateAccount,
   getVolunteer,
-  getAllVolunteers
+  getAllVolunteers,
+  getVolunteerFromEmail
 };

@@ -1,7 +1,8 @@
 const express = require('express')
 
 const {
-    login, register, getVolunteer, getAllVolunteers, updateAccount
+    login, register, getVolunteer, getAllVolunteers, updateAccount,
+    getVolunteerFromEmail
 } = require('../controllers/volunteerController')
 
 const router = express.Router()
@@ -13,6 +14,7 @@ router.post('/register', register)
 router.post('/login', login)
 router.get('/:_id', getVolunteer)
 router.get('/', getAllVolunteers)
+router.get('/email/:Email', getVolunteerFromEmail)
 
 // routes that require jwt auth
 router.patch('/', volRequireAuth, updateAccount)

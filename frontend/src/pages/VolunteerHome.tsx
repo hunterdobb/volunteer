@@ -11,6 +11,7 @@ interface Event {
   Description: string;
   VolsNeeded: number;
   CurrentVols: number;
+  Volunteers: [string];
   StartTime: string;
   EndTime: string;
 }
@@ -20,6 +21,28 @@ const VolunteerHome: React.FC = () => {
   const [signedUpEvents, setSignedUpEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const setUpEvents = async () => {
+    const email = localStorage.getItem("email");
+    const volunteer = await axios.get(
+      `http://localhost:5000/api/volunteer/email/${email}`
+    );
+    const vol_id = volunteer.data._id;
+    // Need to get volunteer id to auto set signed up events to signedup
+    events.forEach((event) => {
+      if (event.Volunteers.includes(vol_id)) {
+        setSignedUpEvents((prev) => {
+          // Avoid duplicating events in the list
+          if (!prev.some((e) => e._id === event._id)) {
+            return [...prev, event];
+          }
+          return prev;
+        });
+      }
+    });
+  };
+
+  setUpEvents();
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -37,9 +60,43 @@ const VolunteerHome: React.FC = () => {
     fetchEvents();
   }, []);
 
+  const signUp = async (event: Event) => {
+    try {
+      const token = localStorage.getItem("token");
+      console.log("token", token);
+      const response = await axios.post(
+        `http://localhost:5000/api/event/join/${event._id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Join", response);
+    } catch (err) {
+      console.error("Error joining event:", err);
+      setError("Failed to join events. Please try again later.");
+    }
+  };
+
+  const updateEvent = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/event");
+      setEvents(response.data);
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching events:", err);
+      setError("Failed to load events. Please try again later.");
+      setLoading(false);
+    }
+  };
+
   // Handle sign-up locally
   const handleSignUp = (event: Event) => {
     if (!signedUpEvents.some((e) => e._id === event._id)) {
+      signUp(event);
+      updateEvent();
       setSignedUpEvents((prev) => [...prev, event]);
       alert(`You signed up for: ${event.Title}`);
     } else {
@@ -70,15 +127,18 @@ const VolunteerHome: React.FC = () => {
           <div className="available-events">
             <h2>Available Events</h2>
             <div className="event-list">
-              {events.map((event) => (
-                <EventCard
-                  key={event._id}
-                  event={event}
-                  onSignUp={handleSignUp}
-                  signedUp={signedUpEvents.some((e) => e._id === event._id)}
-                  onWithdraw={handleWithdraw}
-                />
-              ))}
+              {events.map(
+                (event) =>
+                  !signedUpEvents.some((e) => e._id === event._id) && (
+                    <EventCard
+                      key={event._id}
+                      event={event}
+                      onSignUp={handleSignUp}
+                      signedUp={signedUpEvents.some((e) => e._id === event._id)}
+                      onWithdraw={handleWithdraw}
+                    />
+                  )
+              )}
             </div>
           </div>
 
