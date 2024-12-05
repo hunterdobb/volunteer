@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./VolunteerHome.css";
 import EventCard, { Event } from "../components/EventCard"; // Import the Event type
+import { Navigate, useNavigate } from "react-router-dom";
 
 const VolunteerHome: React.FC = () => {
+  const navigate = useNavigate();
   const [events, setEvents] = useState<Event[]>([]);
   const [signedUpEvents, setSignedUpEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
@@ -137,10 +139,22 @@ const VolunteerHome: React.FC = () => {
     }
   };
 
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem("token");  // Remove token
+    localStorage.removeItem("email");  // Optionally remove email or any other session data
+    navigate("/");  // Navigate to home page, replace with `window.location.href = '/'` if not using React Router
+  };
+
   return (
     <div className="volunteer-home">
       <h1>Welcome to the Volunteer Hub</h1>
       <p>Explore available events and sign up to make a difference!</p>
+
+      {/* Logout Button */}
+      <div className="logout-Button" onClick={handleLogout}>
+        Logout
+      </div>
 
       {loading && <p>Loading events...</p>}
       {error && <p className="error">{error}</p>}
@@ -191,5 +205,4 @@ const VolunteerHome: React.FC = () => {
     </div>
   );
 };
-
 export default VolunteerHome;

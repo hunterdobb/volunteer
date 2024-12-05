@@ -180,6 +180,26 @@ button:focus {
   box-shadow: rgba(60, 64, 67, .3) 0 1px 3px 0, rgba(60, 64, 67, .15) 0 4px 8px 3px;
 }
 
+/* Logout button styling */
+.logout-Button {
+  position: absolute;
+  top: 200px;
+  right: 700px;
+  background-color: #975f5f;
+  color: white;
+  font-size: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 12px;
+  display: inline-block;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
+.logout-Button:hover {
+  background-color: #a48181;
+}
+
 /* Responsive design adjustments */
 @media (max-width: 768px) {
   .event-card {
@@ -187,7 +207,7 @@ button:focus {
   }
 
   .event-list {
-    grid-template-columns: 1fr; /* One item per row on smaller screens */
+    grid-template-columns: 1fr; 
   }
 
   .available-events,
