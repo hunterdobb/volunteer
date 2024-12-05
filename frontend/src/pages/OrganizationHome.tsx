@@ -69,7 +69,7 @@ const OrganizationHome: React.FC = () => {
         },
       });
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         console.log('Event added successfully');
         fetchEvents();
         setShowForm(false);
