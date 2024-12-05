@@ -20,15 +20,22 @@ interface EventCardProps {
 }
 
 const EventCard: React.FC<EventCardProps> = ({ event, onSignUp, onWithdraw, signedUp }) => {
+  let date = event.Date.substring(0, 10);
+  let start = event.StartTime.substring(11, 16);
+  let end = event.EndTime.substring(11, 16);
+  let isodate = new Date(event.Date);
+  let local = isodate.toLocaleDateString('en-US')
+
+
   return (
     <div className="event-card">
       <h3>{event.Title}</h3>
-      <p><strong>Date:</strong> {event.Date}</p>
+      <p><strong>Date:</strong> {local}</p>
       <p><strong>Location:</strong> {event.Location}</p>
       <p><strong>Volunteers Needed:</strong> {event.VolsNeeded}</p>
       <p><strong>Current Volunteers:</strong> {event.CurrentVols}</p>
       <p>{event.Description}</p>
-      <p><strong>Time:</strong> {event.StartTime} - {event.EndTime}</p>
+      <p><strong>Time:</strong> {start} - {end}</p>
 
       {signedUp ? (
         <button className="withdrawButton" onClick={() => onWithdraw(event)}>
