@@ -29,8 +29,12 @@ const VolunteerForm: React.FC<{
     e.preventDefault();
 
     // Combine date and time into ISO DateTime strings
-    const formattedStartTime = new Date(`${eventData.Date}T${eventData.StartTime}:00Z`).toISOString();
-    const formattedEndTime = new Date(`${eventData.Date}T${eventData.EndTime}:00Z`).toISOString();
+    const formattedStartTime = new Date(
+      `${eventData.Date}T${eventData.StartTime}:00Z`
+    ).toISOString();
+    const formattedEndTime = new Date(
+      `${eventData.Date}T${eventData.EndTime}:00Z`
+    ).toISOString();
 
     const newEvent = {
       ...eventData,
@@ -43,7 +47,6 @@ const VolunteerForm: React.FC<{
 
   return (
     <div>
-      <h2>Add Event Details</h2>
       <form onSubmit={submitEvent}>
         <Form.Group className="mb-3">
           <Form.Label>Event Title</Form.Label>

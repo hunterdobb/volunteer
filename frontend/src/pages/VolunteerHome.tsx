@@ -128,16 +128,41 @@ const VolunteerHome: React.FC = () => {
   };
 
   // Handle withdrawal locally
-  const handleWithdraw = (event: Event) => {
-    if (signedUpEvents.some((e) => e._id === event._id)) {
-      withdraw(event);
-      updateEvent(event);
-      setSignedUpEvents((prev) => prev.filter((e) => e._id !== event._id));
-      console.log(`You withdrew from: ${event.Title}`);
-    } else {
-      console.log(`You are not signed up for: ${event.Title}`);
+  const handleWithdraw = async (event: Event) => {
+    try {
+      // Call the backend to withdraw from the event
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `https://volunteer.hunterdobb.xyz/api/event/leave/${event._id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      if (response.status === 200) {
+        console.log("Successfully left the event");
+  
+        // Update the UI immediately by removing the event from signedUpEvents
+        setSignedUpEvents((prev) => prev.filter((e) => e._id !== event._id));
+  
+        // Optionally, update the main events list
+        setEvents((prevEvents) =>
+          prevEvents.map((e) =>
+            e._id === event._id
+              ? { ...e, CurrentVols: e.CurrentVols - 1 } // Decrement volunteer count
+              : e
+          )
+        );
+      }
+    } catch (err) {
+      console.error("Error leaving event:", err);
+      setError("Failed to leave event. Please try again later.");
     }
   };
+  
 
   // Logout function
   const handleLogout = () => {
@@ -149,7 +174,7 @@ const VolunteerHome: React.FC = () => {
   return (
     <div className="volunteer-home">
       <h1>Welcome to the Volunteer Hub</h1>
-      <p>Explore available events and sign up to make a difference!</p>
+      <h3>Explore available events and sign up to make a difference!</h3>
 
       {/* Logout Button */}
       <div className="logout-Button" onClick={handleLogout}>

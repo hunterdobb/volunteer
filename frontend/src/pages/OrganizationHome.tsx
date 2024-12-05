@@ -1,20 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import './OrganizationHome.css';
-import VolunteerForm from '../components/VolunteerForm';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-
-interface Event {
-  _id: string;
-  Title: string;
-  Description: string;
-  Location: string;
-  Date: string;
-  StartTime: string;
-  EndTime: string;
-  VolsNeeded: number;
-  CurrentVols: number;
-}
+import React, { useEffect, useState } from "react";
+import "./OrganizationHome.css";
+import VolunteerForm from "../components/VolunteerForm";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import EventCard, { Event } from "../components/EventCard";
 
 const OrganizationHome: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -24,12 +13,12 @@ const OrganizationHome: React.FC = () => {
   // Extract organization ID from token
   const getOrgIDFromToken = (): string | null => {
     try {
-      const token = localStorage.getItem('token');
-      if (!token) throw new Error('No token found');
-      const payload = JSON.parse(atob(token.split('.')[1]));
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("No token found");
+      const payload = JSON.parse(atob(token.split(".")[1]));
       return payload._id;
     } catch (error) {
-      console.error('Error decoding token:', error);
+      console.error("Error decoding token:", error);
       return null;
     }
   };
@@ -37,21 +26,24 @@ const OrganizationHome: React.FC = () => {
   // Fetch organization events
   const fetchEvents = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       const orgID = getOrgIDFromToken();
 
       if (!orgID) {
-        console.error('Organization ID not found.');
+        console.error("Organization ID not found.");
         return;
       }
 
-      const response = await axios.get(`https://volunteer.hunterdobb.xyz/api/event/organization/${orgID}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        `https://volunteer.hunterdobb.xyz/api/event/organization/${orgID}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       setEvents(response.data);
     } catch (error) {
-      console.error('Error fetching events:', error);
+      console.error("Error fetching events:", error);
     }
   };
 
@@ -62,30 +54,55 @@ const OrganizationHome: React.FC = () => {
   // Add event to the database
   const handleAddEventToDatabase = async (newEvent: any) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
 
-      const response = await axios.post('https://volunteer.hunterdobb.xyz/api/event', newEvent, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await axios.post(
+        "https://volunteer.hunterdobb.xyz/api/event",
+        newEvent,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.status === 200) {
-        console.log('Event added successfully');
+        console.log("Event added successfully");
         fetchEvents();
         setShowForm(false);
       }
     } catch (error) {
-      console.error('Error creating event:', error);
-      console.log('Failed to add event');
+      console.error("Error creating event:", error);
     }
   };
+
+  // Delete event from the database
+  const handleDeleteEvent = async (event: Event) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.delete(
+        `https://volunteer.hunterdobb.xyz/api/event/${event._id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Event deleted successfully");
+        setEvents((prevEvents) => prevEvents.filter((e) => e._id !== event._id));
+      }
+    } catch (error) {
+      console.error("Error deleting event:", error);
+    }
+  };
+
   // Logout function
   const handleLogout = () => {
-    localStorage.removeItem("token");  // Remove token
-    localStorage.removeItem("email");  
-    navigate("/");  
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    navigate("/");
   };
 
   return (
@@ -95,7 +112,6 @@ const OrganizationHome: React.FC = () => {
         <h6>Manage your organization's events and volunteer opportunities.</h6>
       </div>
 
-      {/* Logout Button Container */}
       <div className="logout-container">
         <button className="logout-button" onClick={handleLogout}>
           Logout
@@ -109,7 +125,10 @@ const OrganizationHome: React.FC = () => {
       </div>
 
       {showForm && (
-        <VolunteerForm onClose={() => setShowForm(false)} onSubmit={handleAddEventToDatabase} />
+        <VolunteerForm
+          onClose={() => setShowForm(false)}
+          onSubmit={handleAddEventToDatabase}
+        />
       )}
 
       <div className="event-list">
@@ -117,22 +136,7 @@ const OrganizationHome: React.FC = () => {
         {events.length > 0 ? (
           <div className="event-container">
             {events.map((event) => (
-              <div key={event._id} className="event-card">
-                <h3>{event.Title}</h3>
-                <p>{event.Description}</p>
-                <p>
-                  <strong>Location:</strong> {event.Location}
-                </p>
-                <p>
-                  <strong>Date:</strong> {new Date(event.Date).toLocaleDateString()}
-                </p>
-                <p>
-                  <strong>Time:</strong> {event.StartTime} - {event.EndTime}
-                </p>
-                <p>
-                  <strong>Volunteers Needed:</strong> {event.CurrentVols}/{event.VolsNeeded}
-                </p>
-              </div>
+              <EventCard key={event._id} event={event} onDelete={handleDeleteEvent} />
             ))}
           </div>
         ) : (
