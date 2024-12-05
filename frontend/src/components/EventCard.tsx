@@ -1,12 +1,13 @@
 import React from "react";
 
-interface Event {
+export interface Event {
   _id: string;
   Title: string;
   Location: string;
   Date: string;
   Description: string;
   VolsNeeded: number;
+  Volunteers: [string];
   CurrentVols: number;
   StartTime: string;
   EndTime: string;

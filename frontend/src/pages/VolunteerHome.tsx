@@ -1,20 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./VolunteerHome.css";
-import EventCard from "../components/EventCard";
-
-interface Event {
-  _id: string;
-  Title: string;
-  Location: string;
-  Date: string;
-  Description: string;
-  VolsNeeded: number;
-  CurrentVols: number;
-  Volunteers: [string];
-  StartTime: string;
-  EndTime: string;
-}
+import EventCard, { Event } from '../components/EventCard'; // Import the Event type
 
 const VolunteerHome: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
