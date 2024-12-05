@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./VolunteerHome.css";
 import EventCard, { Event } from "../components/EventCard"; // Import the Event type
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const VolunteerHome: React.FC = () => {
   const navigate = useNavigate();
