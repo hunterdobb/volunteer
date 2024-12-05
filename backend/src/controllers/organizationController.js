@@ -20,7 +20,7 @@ const login = async (req, res) => {
 }
 
 
-// signup organization
+// register organization
 const register = async (req, res) => {
   const { Email, Password, Name, Type, Category, Desc, Website, Location } = req.body;
 
@@ -36,7 +36,7 @@ const register = async (req, res) => {
 }
 
 
-// get public info (not including login info)
+// get single organization
 const getOrganization = async (req, res) => {
   const { _id } = req.params
   if (!mongoose.isValidObjectId(_id)) {
@@ -53,9 +53,9 @@ const getOrganization = async (req, res) => {
 }
 
 
-// get public info (not including login info)
+// get all organizations (newst to oldest)
 const getAllOrganizations = async (req, res) => {
-  const all = await Organization.find({}, { Password: 0 })
+  const all = await Organization.find({}, { Password: 0 }).sort({ createdAt: -1 })
   if (!all) { return res.status(404).json({ error: 'No organizations found' }) }
   res.status(200).json(all)
 }

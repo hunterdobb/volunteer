@@ -12,8 +12,12 @@ const LoginVolunteer: React.FC = () => {
     const handleLogin = async (e: React.FormEvent) => {
       e.preventDefault();
       try {
-        const response = await axios.post('http://localhost:5000/api/volunteer/login', { Email, Password }); 
+        const response = await axios.post('http://localhost:5000/api/volunteer/login', { Email, Password });
         const { role } = response.data; 
+        const token = response.data.token;
+        localStorage.setItem('token', token);
+        const email = response.data.email;
+        localStorage.setItem('email', email);
         
         if (role === 'volunteer') {
           navigate('/volunteer/login');
