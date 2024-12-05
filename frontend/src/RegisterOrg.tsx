@@ -26,7 +26,7 @@ const RegisterOrg = () => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/organization/register', formData);// TODO: figure this out
+      await axios.post('https://volunteer.hunterdobb.xyz/api/organization/register', formData);// TODO: figure this out
       navigate('/organization/login'); // Redirect to login page after successful registration
     } catch (err) {
       setError('Failed to register. Please try again.');
