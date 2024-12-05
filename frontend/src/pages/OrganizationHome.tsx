@@ -43,7 +43,7 @@ const OrganizationHome: React.FC = () => {
         return;
       }
 
-      const response = await axios.get(`http://localhost:5000/api/event/organization/${orgID}`, {
+      const response = await axios.get(`https://volunteer.hunterdobb.xyz/api/event/organization/${orgID}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -62,7 +62,7 @@ const OrganizationHome: React.FC = () => {
     try {
       const token = localStorage.getItem('token');
 
-      const response = await axios.post('http://localhost:5000/api/event', newEvent, {
+      const response = await axios.post('https://volunteer.hunterdobb.xyz/api/event', newEvent, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',

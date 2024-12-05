@@ -12,7 +12,7 @@ const VolunteerHome: React.FC = () => {
   const setUpEvents = async () => {
     const email = localStorage.getItem("email");
     const volunteer = await axios.get(
-      `http://localhost:5000/api/volunteer/email/${email}`
+      `https://volunteer.hunterdobb.xyz/api/volunteer/email/${email}`
     );
     const vol_id = volunteer.data._id;
     // Need to get volunteer id to auto set signed up events to signedup
@@ -34,7 +34,7 @@ const VolunteerHome: React.FC = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/event");
+        const response = await axios.get("https://volunteer.hunterdobb.xyz/api/event");
         setEvents(response.data);
         setLoading(false);
       } catch (err) {
@@ -51,7 +51,7 @@ const VolunteerHome: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        `http://localhost:5000/api/event/join/${event._id}`,
+        `https://volunteer.hunterdobb.xyz/api/event/join/${event._id}`,
         {},
         {
           headers: {
@@ -73,7 +73,7 @@ const VolunteerHome: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        `http://localhost:5000/api/event/leave/${event._id}`,
+        `https://volunteer.hunterdobb.xyz/api/event/leave/${event._id}`,
         {},
         {
           headers: {
@@ -94,7 +94,7 @@ const VolunteerHome: React.FC = () => {
   const updateEvent = async (event: Event) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/event/single/${event._id}`
+        `https://volunteer.hunterdobb.xyz/api/event/single/${event._id}`
       );
       setEvents((prevEvents) =>
         prevEvents.map((e) => (e._id === event._id ? response.data : e))

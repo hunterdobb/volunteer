@@ -32,7 +32,7 @@ const RegisterVolunteer = () => {
         ...formData,
         Birthday: formattedBirthday,
     };
-      await axios.post('http://localhost:5000/api/volunteer/register', updatedFormData);
+      await axios.post('https://volunteer.hunterdobb.xyz/api/volunteer/register', updatedFormData);
       navigate('/volunteer/login'); // Redirect to login page after successful registration
     } catch (err) {
       setError('Failed to register. Please try again.');
