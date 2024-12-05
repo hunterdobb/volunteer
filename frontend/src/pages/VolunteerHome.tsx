@@ -121,9 +121,9 @@ const VolunteerHome: React.FC = () => {
       signUp(event);
       updateEvent(event);
       setSignedUpEvents((prev) => [...prev, event]);
-      alert(`You signed up for: ${event.Title}`);
+      console.log(`You signed up for: ${event.Title}`);
     } else {
-      alert(`You are already signed up for: ${event.Title}`);
+      console.log(`You are already signed up for: ${event.Title}`);
     }
   };
 
@@ -133,17 +133,17 @@ const VolunteerHome: React.FC = () => {
       withdraw(event);
       updateEvent(event);
       setSignedUpEvents((prev) => prev.filter((e) => e._id !== event._id));
-      alert(`You withdrew from: ${event.Title}`);
+      console.log(`You withdrew from: ${event.Title}`);
     } else {
-      alert(`You are not signed up for: ${event.Title}`);
+      console.log(`You are not signed up for: ${event.Title}`);
     }
   };
 
   // Logout function
   const handleLogout = () => {
     localStorage.removeItem("token");  // Remove token
-    localStorage.removeItem("email");  // Optionally remove email or any other session data
-    navigate("/");  // Navigate to home page, replace with `window.location.href = '/'` if not using React Router
+    localStorage.removeItem("email");  
+    navigate("/");  
   };
 
   return (

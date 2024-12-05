@@ -70,13 +70,13 @@ const OrganizationHome: React.FC = () => {
       });
 
       if (response.status === 201) {
-        alert('Event added successfully');
+        console.log('Event added successfully');
         fetchEvents();
         setShowForm(false);
       }
     } catch (error) {
       console.error('Error creating event:', error);
-      alert('Failed to add event');
+      console.log('Failed to add event');
     }
   };
 
