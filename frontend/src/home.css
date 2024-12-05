@@ -1,7 +1,7 @@
 /* General styling for the Home page container */
 .home-container {
     text-align: center;
-    max-width: 500px;
+    max-width: 600px;
     margin: 50px auto;
     padding: 40px;
     background-color: #80acd2; /* Light blue for the container background */
@@ -33,19 +33,20 @@
 .option {
     text-align: center;
     background-color: #9a87a8;
-    padding: 25px;
+    padding: 17px;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 50%; /* Adjust width for a balanced layout */
+    width: 45; /* Adjust width for a balanced layout */
     cursor: pointer;
     position: relative; /* Needed for dropdown menu positioning */
 }
 
 .option h2 {
     /*border: 1px solid red;*/ /* Debugging border */
+    text-align: left;
     padding: 10px;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 17px;
     font-style: italic;
     color: #0e0e0e;
     margin-bottom: 10px;
@@ -65,9 +66,9 @@
     background-color: #c7c3ca; /* Matches your intended background color */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow for depth */
     border-radius: 12px; /* Smooth, rounded corners */
-    padding: 10px; /* Adds internal spacing */
+    padding: 15px; /* Adds internal spacing */
     z-index: 1000; /* Ensures the dropdown appears above other elements */
-    width: 150px; /* Ensures consistent width for dropdown */
+    width: 100px; /* Ensures consistent width for dropdown */
 }
 
 /* Links within the dropdown menu */

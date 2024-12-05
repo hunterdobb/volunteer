@@ -1,14 +1,15 @@
 /* General styling for the page */
 body {
-  font-family: Garamond, sans-serif;
+  font-family: 'Garamond', sans-serif;
   background: radial-gradient(circle at 10% 20%, rgb(50, 172, 109) 0%, rgb(209, 251, 155) 100.2%);
   margin: 0;
   padding: 0;
   text-align: center;
+  color: #333;
 }
 
 /* Center the container */
-div {
+.organization-home {
   max-width: 1000px;
   margin: 50px auto;
   padding: 40px;
@@ -20,12 +21,36 @@ div {
 
 /* Page heading */
 h1 {
-  font-size: 24px;
+  font-size: 28px;
   margin-bottom: 20px;
-  text-align: center;
   font-weight: lighter;
   font-style: italic;
   color: #333;
+}
+
+/* Logout Button Container */
+.logout-container {
+  margin-top: 20px;  /* Adjusts the vertical spacing */
+  text-align: center;
+  width: 100%;
+}
+
+.logout-button {
+  background-color: #dc3545;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 12px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+  width: auto;
+  margin: 0 auto;
+}
+
+.logout-button:hover {
+  background-color: #c82333;
 }
 
 /* Event List Section */
@@ -34,13 +59,14 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 10px;
 }
 
 /* Grid layout for event cards */
 .event-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px; 
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
   width: 100%;
   padding: 20px;
   box-sizing: border-box;
@@ -67,18 +93,18 @@ h1 {
   font-size: 1.25rem;
   margin-bottom: 10px;
   color: #007bff;
+  font-weight: bold;
 }
 
 .event-card p {
   font-size: 0.95rem;
   margin: 5px 0;
-  color: #333;
+  color: #555;
 }
 
-/* Button styling */
 button {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   font-size: 16px;
   font-weight: bold;
   background-color: #007bff;
@@ -86,6 +112,8 @@ button {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-bottom: 10px;
 }
 
 button:hover {
@@ -96,3 +124,8 @@ button:focus {
   outline: none;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
+
+button:active {
+  transform: scale(0.98);
+}
+

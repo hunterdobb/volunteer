@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './OrganizationHome.css';
 import VolunteerForm from '../components/VolunteerForm';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 interface Event {
   _id: string;
@@ -18,6 +19,7 @@ interface Event {
 const OrganizationHome: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const navigate = useNavigate();
 
   // Extract organization ID from token
   const getOrgIDFromToken = (): string | null => {
@@ -79,12 +81,25 @@ const OrganizationHome: React.FC = () => {
       console.log('Failed to add event');
     }
   };
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem("token");  // Remove token
+    localStorage.removeItem("email");  
+    navigate("/");  
+  };
 
   return (
     <div className="organization-home">
       <div className="organization-home-top">
         <h1>Welcome to the Organization Home Page</h1>
         <h6>Manage your organization's events and volunteer opportunities.</h6>
+      </div>
+
+      {/* Logout Button Container */}
+      <div className="logout-container">
+        <button className="logout-button" onClick={handleLogout}>
+          Logout
+        </button>
       </div>
 
       <div className="add-button d-flex">
