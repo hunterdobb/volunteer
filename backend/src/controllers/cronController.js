@@ -1,6 +1,6 @@
 const cron = require('node-cron');
 const {eventReminder} = require('./emailController');
-const {getTodaysEvents, getOldEvents} = require('./eventContoller');
+const {getTodaysEvents, getOldEvents} = require('./eventController');
 const Volunteer = require('../models/volunteer.model');
 const Organization = require('../models/organization.model');
 const Event = require('../models/event.model');
