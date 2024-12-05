@@ -21,7 +21,7 @@ interface EventCardProps {
 }
 
 const EventCard: React.FC<EventCardProps> = ({ event, onSignUp, onWithdraw, signedUp }) => {
-  let date = event.Date.substring(0, 10);
+  // let date = event.Date.substring(0, 10);
   let start = event.StartTime.substring(11, 16);
   let end = event.EndTime.substring(11, 16);
   let isodate = new Date(event.Date);
