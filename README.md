@@ -37,6 +37,8 @@
 - [ ] Browse all Events
 - [ ] Join Event
 - [ ] Leave Event
+- [ ] "Follow" Organization to get notified when they post new event
+- [ ] "Unfollow" Organization to no longer be notified
 - [ ] Profile page with list of all joined Events
 - [ ] ? Edit account
 - [ ] ? Add photo to account
@@ -54,7 +56,6 @@
 
 #### Optional Info for Organization Account
 * Organization photo
-* ...
 
 ---
 
@@ -77,35 +78,35 @@
 
 ## Event Posting Info
 ### Required Info
-**Title**
+**Title:**
 Short, descriptive title like “Food Pantry Assistant” or “Youth Tutoring Volunteer.”
 
-**Description**
+**Description:**
 Overview of the opportunity, including tasks, purpose, and the impact it aims to make.
 
-**Location**
+**Location:**
 In-person, remote, or hybrid. For in-person roles, include a specific address or general area.
 
-**Date and Time**
+**Date and Time:**
 Start and end dates, and specify if it’s ongoing, a one-time event, or a recurring opportunity.
 Include specific hours or shift times, if applicable.
 
-**Number of Volunteers Needed**
+**Number of Volunteers Needed:**
 Helps volunteers gauge if there’s still demand or if a team environment is involved.
 
 
 ### Info we can add if we have time
-**Duration**
+**Duration:**
 Expected time commitment (e.g., “2 hours per week for 3 months” or “one-time 4-hour shift”)
 
-**Minimum Age Requirement**
+**Minimum Age Requirement:**
 Roles with age restrictions, working with children or requiring certain physical tasks.
 
-**Skills Needed**
+**Skills Needed:**
 Specific skills or experience needed, like event planning, language proficiency, etc.
 
-**Certifications or Background Checks**
+**Certifications or Background Checks:**
 (e.g., CPR, food handler’s permit) or checks (e.g., background check, fingerprinting).
 
-**Physical Requirements**
+**Physical Requirements:**
 Requires physical tasks like lifting, standing for long periods, or outdoor work.
