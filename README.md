@@ -15,7 +15,7 @@
 **Database:** Adrian & Dylan
 
 
-## Goal by Wednesday, Dec. 5
+## Goal by Wednesday, Dec. 4
 - [ ] Complete everything
 
 
