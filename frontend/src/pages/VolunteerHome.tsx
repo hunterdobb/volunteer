@@ -1,20 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./VolunteerHome.css";
-import EventCard from "../components/EventCard";
-
-interface Event {
-  _id: string;
-  Title: string;
-  Location: string;
-  Date: string;
-  Description: string;
-  VolsNeeded: number;
-  CurrentVols: number;
-  Volunteers: [string];
-  StartTime: string;
-  EndTime: string;
-}
+import EventCard, { Event } from "../components/EventCard"; // Import the Event type
 
 const VolunteerHome: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -72,6 +59,10 @@ const VolunteerHome: React.FC = () => {
           },
         }
       );
+      // Use the response variable
+      if (response.status === 200) {
+        console.log("Successfully joined the event");
+      }
     } catch (err) {
       console.error("Error joining event:", err);
       setError("Failed to join events. Please try again later.");
@@ -90,6 +81,10 @@ const VolunteerHome: React.FC = () => {
           },
         }
       );
+      // Use the response variable
+      if (response.status === 200) {
+        console.log("Successfully left the event");
+      }
     } catch (err) {
       console.error("Error leaving event:", err);
       setError("Failed to leave events. Please try again later.");
@@ -98,7 +93,9 @@ const VolunteerHome: React.FC = () => {
 
   const updateEvent = async (event: Event) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/event/single/${event._id}`);
+      const response = await axios.get(
+        `http://localhost:5000/api/event/single/${event._id}`
+      );
       setEvents((prevEvents) =>
         prevEvents.map((e) => (e._id === event._id ? response.data : e))
       );
@@ -172,15 +169,18 @@ const VolunteerHome: React.FC = () => {
             <h2>Signed Up Events</h2>
             <div className="event-list">
               {signedUpEvents.length > 0 ? (
-                signedUpEvents.map((event) => (
-                  signedUpEvents.some((e) => e._id === event._id) && <EventCard
-                    key={event._id}
-                    event={event}
-                    onSignUp={handleSignUp}
-                    signedUp
-                    onWithdraw={handleWithdraw}
-                  />
-                ))
+                signedUpEvents.map(
+                  (event) =>
+                    signedUpEvents.some((e) => e._id === event._id) && (
+                      <EventCard
+                        key={event._id}
+                        event={event}
+                        onSignUp={handleSignUp}
+                        signedUp
+                        onWithdraw={handleWithdraw}
+                      />
+                    )
+                )
               ) : (
                 <p>You haven't signed up for any events yet.</p>
               )}
