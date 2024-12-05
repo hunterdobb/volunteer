@@ -14,9 +14,8 @@ router.post('/login', login)
 router.get('/:_id', getVolunteer)
 router.get('/', getAllVolunteers)
 
-// Protected routes
+// routes that require jwt auth
 router.patch('/', volRequireAuth, updateAccount)
-
 
 module.exports = router
 

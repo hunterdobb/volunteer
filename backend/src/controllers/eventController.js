@@ -21,10 +21,24 @@ const createEvent = async (req, res) => {
             Title, VolsNeeded, CurrentVols: 0,
             EndTime, StartTime, Volunteers: []
         })
+
+        // add eventID to Organization Events array
+        const organization = await Organization.findOne({ _id: org_id })
+        if (!organization) { return res.status(404).json({ error: 'Organization not found' }) }
+
+        const orgEvents = organization.Events;
+        orgEvents.push(event._id);
+
+        try {
+            await Organization.updateOne({ _id: org_id }, { Events: orgEvents })
+        } catch (error) {
+            console.log(err);
+            return res.status(500).json({ error: 'Unable to add the Event to your Organization' })
+        }
+
         res.status(200).json(event)
 
         // send email to all volunteers (subscribers) of the organization
-
         const org = await Organization.findById(org_id);
         const volunteers = await org.Volunteers; // subscribers
         await Promise.all(volunteers.map(async (vol_id) => {
@@ -39,7 +53,7 @@ const createEvent = async (req, res) => {
 };
 
 
-// sign up for an event as volunteer
+// join an event as volunteer
 const joinEvent = async (req, res) => {
     const { eventID } = req.params
     const vol_id = req.volunteerUser._id
@@ -78,11 +92,60 @@ const joinEvent = async (req, res) => {
             VolsNeeded: event.VolsNeeded - 1
         }).catch(err => {
             console.log(err);
-            return res.status(500).send({ error: 'Error signing up' })
+            return res.status(500).send({ error: 'Error joining event' })
         })
     }
 
     res.send({ success: 'Signed up' });
+}
+
+
+// leave an event as volunteer
+const leaveEvent = async (req, res) => {
+    const { eventID } = req.params
+    const vol_id = req.volunteerUser._id
+    if (!eventID) { return res.status(400).json({ error: 'Invalid parameters' }) }
+
+    const volunteer = await Volunteer.findOne({ _id: vol_id }, { Password: 0 })
+    if (!volunteer) { return res.status(404).json({ error: 'Volunteer not found' }) }
+
+    const event = await Event.findOne({ _id: eventID })
+    if (!event) { return res.status(404).json({ error: 'Event not found' }) }
+    // if (event.VolsNeeded == 0) { return res.status(400).json({ error: 'Event is full' }); }
+
+    const organization = await Organization.findOne({ _id: event.OrgID })
+    if (!organization) { return res.status(404).json({ error: 'Organization not found' }) }
+
+    // ensure volunteer is currently joined
+    const myEvents = volunteer.Events;
+    if (!myEvents.includes(eventID)) { return res.status(500).json({ error: 'Already left event' }) }
+
+    // remove event from volunteers Events
+    myEvents.splice(myEvents.indexOf(eventID), 1)
+
+    try {
+        await Volunteer.updateOne({ _id: vol_id }, { Events: myEvents })
+    } catch (error) {
+        console.log(err);
+        return res.status(500).json({ error: "Error leaving event" })
+    }
+
+    // remove volunteer from organizations event
+    const eventVolunteers = event.Volunteers;
+    if (eventVolunteers.includes(vol_id)) {
+        eventVolunteers.splice(eventVolunteers.indexOf(vol_id), 1)
+
+        await Event.updateOne({ _id: event._id }, {
+            Volunteers: eventVolunteers,
+            CurrentVols: event.CurrentVols - 1,
+            VolsNeeded: event.VolsNeeded + 1
+        }).catch(err => {
+            console.log(err);
+            return res.status(500).send({ error: 'Error leaving event' })
+        })
+    }
+
+    res.status(200).json({ success: 'Successfully left event' });
 }
 
 
@@ -118,13 +181,26 @@ const getSingleEvent = async (req, res) => {
 
 const deleteEvent = async (req, res) => {
     const { id } = req.params
+    const org_id = req.organizationUser._id
+
     if (!mongoose.isValidObjectId(id)) {
         return res.status(404).json({ error: 'No event found' })
     }
 
+    const organization = await Organization.findOne({ _id: org_id })
+    if (!organization) { return res.status(404).json({ error: 'Must be signed in' }) }
+
     const event = await Event.findByIdAndDelete(id)
-    if (!event) {
-        return res.status(400).json({ error: 'Unable to delete the event' })
+    if (!event) { return res.status(400).json({ error: 'Unable to delete the event' }) }
+
+    // remove the event id from Organizations events array
+    const orgEvents = organization.Events;
+    orgEvents.splice(orgEvents.indexOf(id), 1)
+
+    try {
+        await Organization.updateOne({ _id: org_id }, { Events: orgEvents })
+    } catch (error) {
+        return res.status(500).json({ error: 'Unable to delete the Event' })
     }
 
     res.status(200).json(event)
@@ -176,5 +252,6 @@ module.exports = {
     updateEvent,
     getTodaysEvents,
     getOldEvents,
-    joinEvent
+    joinEvent,
+    leaveEvent
 };

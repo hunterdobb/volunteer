@@ -20,7 +20,7 @@ const login = async (req, res) => {
 }
 
 
-// signup volunteer
+// register volunteer
 const register = async (req, res) => {
   const { Email, Password, FirstName, LastName, Birthday } = req.body;
 
@@ -55,7 +55,7 @@ const getVolunteer = async (req, res) => {
 
 // get public info (not including password)
 const getAllVolunteers = async (req, res) => {
-  const all = await Volunteer.find({}, { Password: 0 })
+  const all = await Volunteer.find({}, { Password: 0 }).sort({ createdAt: -1 })
   if (!all) { return res.status(404).json({ error: 'No volunteers found' }) }
   res.status(200).json(all)
 }

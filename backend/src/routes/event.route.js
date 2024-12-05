@@ -2,8 +2,8 @@ const express = require('express');
 const {
     createEvent, getOrganizationEvents, getAllEvents, getSingleEvent, deleteEvent, updateEvent,
     joinEvent, 
-    // leaveEvent
-} = require('../controllers/eventContoller')
+    leaveEvent
+} = require('../controllers/eventController')
 
 const orgRequireAuth = require('../middleware/orgRequireAuth')
 const volRequireAuth = require('../middleware/volRequireAuth')
@@ -20,7 +20,7 @@ router.post('/', orgRequireAuth, createEvent)
 router.delete('/:id', orgRequireAuth, deleteEvent)
 router.patch('/:id', orgRequireAuth, updateEvent)
 router.post('/join/:eventID', volRequireAuth, joinEvent)
-// router.post('/leave/:eventID', volRequireAuth, leaveEvent)
+router.post('/leave/:eventID', volRequireAuth, leaveEvent)
 
 module.exports = router
 

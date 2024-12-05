@@ -17,7 +17,7 @@ router.post('/login', login)
 router.get('/:_id', getOrganization)
 router.get('/', getAllOrganizations)
 
-// Protected routes
+// routes that require jwt auth
 router.patch('/', orgRequireAuth, updateAccount)
 
 // TODO
