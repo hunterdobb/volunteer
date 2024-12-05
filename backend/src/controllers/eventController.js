@@ -64,6 +64,7 @@ const joinEvent = async (req, res) => {
 
     const event = await Event.findOne({ _id: eventID })
     if (!event) { return res.status(404).json({ error: 'Event not found' }) }
+    
     if (event.VolsNeeded == 0) { return res.status(400).json({ error: 'Event is full' }); }
 
     const organization = await Organization.findOne({ _id: event.OrgID })
