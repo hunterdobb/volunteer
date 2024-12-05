@@ -3,7 +3,7 @@ const {
     createEvent, getOrganizationEvents, getAllEvents, getSingleEvent, deleteEvent, updateEvent,
     joinEvent, 
     // leaveEvent
-} = require('../controllers/eventContoller')
+} = require('../controllers/eventController')
 
 const orgRequireAuth = require('../middleware/orgRequireAuth')
 const volRequireAuth = require('../middleware/volRequireAuth')
@@ -13,8 +13,7 @@ const router = express.Router()
 // public routes
 router.get('/', getAllEvents)
 router.get('/single/:id', getSingleEvent)
-router.get('/organization/:id', getOrganizationEvents)
-
+router.get('/organization/:id', orgRequireAuth, getOrganizationEvents);
 // routes that require jwt auth (must be logged in with correct org. account)
 router.post('/', orgRequireAuth, createEvent)
 router.delete('/:id', orgRequireAuth, deleteEvent)
