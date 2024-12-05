@@ -10,6 +10,10 @@ const OrganizationHome: React.FC = () => {
   const [showForm, setShowForm] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    document.title = 'Volunteer Hub';
+  }, []);
+
   // Extract organization ID from token
   const getOrgIDFromToken = (): string | null => {
     try {

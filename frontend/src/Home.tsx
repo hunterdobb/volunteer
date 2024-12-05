@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './home.css';
 
 const Home = () => {
   const [volunteerDropdown, setVolunteerDropdown] = useState(false);
   const [organizationDropdown, setOrganizationDropdown] = useState(false);
+
+  useEffect(() => {
+    document.title = 'Volunteer Hub';
+  }, []);
 
   const toggleVolunteerDropdown = () => {
     console.log("Volunteer dropdown clicked!");

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./login.css";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -7,6 +7,11 @@ const LoginOrg: React.FC = () => {
     const [Email, setEmail] = useState('');
     const [Password, setPassword] = useState('');
     const [error, setError] = useState('');
+
+    useEffect(() => {
+        document.title = 'Volunteer Hub - Login';
+    }, []);
+
     const navigate = useNavigate();
 
     const handleLogin = async (e: React.FormEvent) => {

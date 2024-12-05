@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import "./register.css";
@@ -14,6 +14,10 @@ const RegisterVolunteer = () => {
 
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = 'Volunteer Hub - Register';
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;

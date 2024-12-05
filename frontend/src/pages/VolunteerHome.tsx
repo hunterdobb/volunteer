@@ -11,6 +11,10 @@ const VolunteerHome: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    document.title = 'Volunteer Hub';
+  }, []);
+
   const setUpEvents = async () => {
     const email = localStorage.getItem("email");
     const volunteer = await axios.get(
@@ -71,6 +75,7 @@ const VolunteerHome: React.FC = () => {
     }
   };
 
+  /*
   const withdraw = async (event: Event) => {
     try {
       const token = localStorage.getItem("token");
@@ -91,7 +96,7 @@ const VolunteerHome: React.FC = () => {
       console.error("Error leaving event:", err);
       setError("Failed to leave events. Please try again later.");
     }
-  };
+  };*/
 
   const updateEvent = async (event: Event) => {
     try {
