@@ -22,28 +22,6 @@ const VolunteerHome: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const setUpEvents = async () => {
-    const email = localStorage.getItem("email");
-    const volunteer = await axios.get(
-      `http://localhost:5000/api/volunteer/email/${email}`
-    );
-    const vol_id = volunteer.data._id;
-    // Need to get volunteer id to auto set signed up events to signedup
-    events.forEach((event) => {
-      if (event.Volunteers.includes(vol_id)) {
-        setSignedUpEvents((prev) => {
-          // Avoid duplicating events in the list
-          if (!prev.some((e) => e._id === event._id)) {
-            return [...prev, event];
-          }
-          return prev;
-        });
-      }
-    });
-  };
-
-  setUpEvents();
-
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -80,34 +58,46 @@ const VolunteerHome: React.FC = () => {
     }
   };
 
-  const updateEvent = async () => {
+  const withdraw = async (event: Event) => {
     try {
-      const response = await axios.get("http://localhost:5000/api/event");
-      setEvents(response.data);
-      setLoading(false);
+      const token = localStorage.getItem("token");
+      console.log("token", token);
+      const response = await axios.post(
+        `http://localhost:5000/api/event/leave/${event._id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Leave", response);
     } catch (err) {
-      console.error("Error fetching events:", err);
-      setError("Failed to load events. Please try again later.");
-      setLoading(false);
+      console.error("Error withdrawing from event:", err);
+      setError("Failed to withdraw from events. Please try again later.");
     }
   };
 
-  // Handle sign-up locally
   const handleSignUp = (event: Event) => {
     if (!signedUpEvents.some((e) => e._id === event._id)) {
       signUp(event);
-      updateEvent();
-      setSignedUpEvents((prev) => [...prev, event]);
+      setSignedUpEvents((prevSignedUp) => [...prevSignedUp, event]);
+      setEvents((prevEvents) =>
+        prevEvents.filter((e) => e._id !== event._id)
+      );
       alert(`You signed up for: ${event.Title}`);
     } else {
       alert(`You are already signed up for: ${event.Title}`);
     }
   };
 
-  // Handle withdrawal locally
   const handleWithdraw = (event: Event) => {
     if (signedUpEvents.some((e) => e._id === event._id)) {
-      setSignedUpEvents((prev) => prev.filter((e) => e._id !== event._id));
+      withdraw(event);
+      setSignedUpEvents((prevSignedUp) =>
+        prevSignedUp.filter((e) => e._id !== event._id)
+      );
+      setEvents((prevEvents) => [...prevEvents, event]);
       alert(`You withdrew from: ${event.Title}`);
     } else {
       alert(`You are not signed up for: ${event.Title}`);
@@ -127,18 +117,15 @@ const VolunteerHome: React.FC = () => {
           <div className="available-events">
             <h2>Available Events</h2>
             <div className="event-list">
-              {events.map(
-                (event) =>
-                  !signedUpEvents.some((e) => e._id === event._id) && (
-                    <EventCard
-                      key={event._id}
-                      event={event}
-                      onSignUp={handleSignUp}
-                      signedUp={signedUpEvents.some((e) => e._id === event._id)}
-                      onWithdraw={handleWithdraw}
-                    />
-                  )
-              )}
+              {events.map((event) => (
+                <EventCard
+                  key={`available-${event._id}`} // Ensuring unique keys
+                  event={event}
+                  onSignUp={handleSignUp}
+                  signedUp={false}
+                  onWithdraw={handleWithdraw}
+                />
+              ))}
             </div>
           </div>
 
@@ -148,7 +135,7 @@ const VolunteerHome: React.FC = () => {
               {signedUpEvents.length > 0 ? (
                 signedUpEvents.map((event) => (
                   <EventCard
-                    key={event._id}
+                    key={`signedup-${event._id}`} // Ensuring unique keys
                     event={event}
                     onSignUp={handleSignUp}
                     signedUp
