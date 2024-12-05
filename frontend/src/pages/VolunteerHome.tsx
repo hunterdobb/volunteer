@@ -22,16 +22,33 @@ const VolunteerHome: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const setUpEvents = async () => {
+    const email = localStorage.getItem("email");
+    const volunteer = await axios.get(
+      `http://localhost:5000/api/volunteer/email/${email}`
+    );
+    const vol_id = volunteer.data._id;
+    // Need to get volunteer id to auto set signed up events to signedup
+    events.forEach((event) => {
+      if (event.Volunteers.includes(vol_id)) {
+        setSignedUpEvents((prev) => {
+          // Avoid duplicating events in the list
+          if (!prev.some((e) => e._id === event._id)) {
+            return [...prev, event];
+          }
+          return prev;
+        });
+      }
+    });
+  };
+
+  setUpEvents();
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/event");
-        console.log("respons", response);
         setEvents(response.data);
-        // Need to get volunteer id to auto set signed up events to signedup
-        // if (!events.some((e) => e.Volunteers.includes(volunteerUser._id))) {
-          
-        // }
         setLoading(false);
       } catch (err) {
         console.error("Error fetching events:", err);
@@ -44,22 +61,23 @@ const VolunteerHome: React.FC = () => {
   }, []);
 
   const signUp = async (event: Event) => {
-      try {
-        const token = localStorage.getItem("token");
-        console.log("token", token)
-        const response = await axios.post(`http://localhost:5000/api/event/join/${event._id}`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        console.log("Join", response);
-      } catch (err) {
-        console.error("Error joining event:", err);
-        setError("Failed to join events. Please try again later.");
-      }
+    try {
+      const token = localStorage.getItem("token");
+      console.log("token", token);
+      const response = await axios.post(
+        `http://localhost:5000/api/event/join/${event._id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Join", response);
+    } catch (err) {
+      console.error("Error joining event:", err);
+      setError("Failed to join events. Please try again later.");
+    }
   };
 
   const updateEvent = async () => {
@@ -109,16 +127,18 @@ const VolunteerHome: React.FC = () => {
           <div className="available-events">
             <h2>Available Events</h2>
             <div className="event-list">
-              {events.map((event) => (
-                !signedUpEvents.some((e) => e._id === event._id) &&
-                <EventCard
-                  key={event._id}
-                  event={event}
-                  onSignUp={handleSignUp}
-                  signedUp={signedUpEvents.some((e) => e._id === event._id)}
-                  onWithdraw={handleWithdraw}
-                />
-              ))}
+              {events.map(
+                (event) =>
+                  !signedUpEvents.some((e) => e._id === event._id) && (
+                    <EventCard
+                      key={event._id}
+                      event={event}
+                      onSignUp={handleSignUp}
+                      signedUp={signedUpEvents.some((e) => e._id === event._id)}
+                      onWithdraw={handleWithdraw}
+                    />
+                  )
+              )}
             </div>
           </div>
 
