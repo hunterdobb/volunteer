@@ -6,7 +6,6 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-    "noEmitOnError": false,      // Ensures that the build continues despite errors
 
     /* Bundler mode */
     "moduleResolution": "Bundler",
