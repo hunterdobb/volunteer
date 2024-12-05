@@ -157,6 +157,19 @@ const getOrganizationEvents = async (req, res) => {
 }
 
 
+// get all the events matching a volunteer id. (newest to oldest)
+const getVolunteerJoinedEvents = async (req, res) => {
+    const { volID } = req.params
+
+    const volunteer = await Volunteer.findOne({ _id: volID }, { Password: 0 })
+    if (!volunteer) { return res.status(404).json({ error: 'No volunteer found' }) }
+    const myEvents = volunteer.Events
+
+    const events = await Event.find({ _id: { $in: myEvents } }).sort({ createdAt: -1 })
+    res.status(200).json(events)
+}
+
+
 // (newest to oldest)
 const getAllEvents = async (req, res) => {
     const events = await Event.find().sort({ createdAt: -1 })
@@ -253,5 +266,6 @@ module.exports = {
     getTodaysEvents,
     getOldEvents,
     joinEvent,
-    leaveEvent
+    leaveEvent,
+    getVolunteerJoinedEvents
 };
