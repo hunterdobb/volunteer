@@ -1,109 +1,117 @@
-General layout for the Volunteer Home
+/* VolunteerHome-specific styles */
 .volunteer-home {
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  h1, h2 {
-    text-align: center;
-    font-style: italic;
-  }
-  
-  .error {
-    color: red;
-    text-align: center;
-  }
-  
-  .event-container {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    background-color: #2c87b1;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
-  
-  .available-events,
-  .signed-up-events {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+
+.volunteer-home h1,
+.volunteer-home h2 {
+  text-align: center;
+  font-style: italic;
+}
+
+.volunteer-home .error {
+  color: red;
+  text-align: center;
+}
+
+/* Container for event sections */
+.volunteer-home .event-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+}
+
+/* Section for signed-up events */
+.volunteer-home .signed-up-section {
+  order: 1;
+}
+
+/* Grid layout for signed-up events */
+.volunteer-home .signed-up-events {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Section for available events */
+.volunteer-home .available-section {
+  order: 2;
+}
+
+/* Grid layout for available events */
+.volunteer-home .available-events {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for individual event cards */
+.volunteer-home .event-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.volunteer-home .event-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.volunteer-home .event-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+  color: #007bff;
+}
+
+.volunteer-home .event-card p {
+  font-size: 0.95rem;
+  margin: 5px 0;
+  color: #333;
+}
+
+/* Buttons for signing up and withdrawing */
+.volunteer-home .registerButton,
+.volunteer-home .withdrawButton {
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.volunteer-home .registerButton:hover,
+.volunteer-home .withdrawButton:hover {
+  background-color: #0056b3;
+}
+
+.volunteer-home .registerButton:disabled,
+.volunteer-home .withdrawButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+  .volunteer-home .available-events,
+  .volunteer-home .signed-up-events {
+    grid-template-columns: 1fr;
   }
-  
-  .available-events {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: space-between;
-    background-color: rgb(255, 255, 255);
-  }
-  
-  .event-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: space-between;
-    background-color: #ffffff;
-  }
-  
-  /* Style for individual event cards */
-  .event-card {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    width: 30%; 
-    box-sizing: border-box;
-  }
-  
-  .event-card h3 {
-    margin-top: 0;
-  }
-  
-  .event-card p {
-    margin: 5px 0;
-  }
-  
-  /* .registerButton,
-  .withdrawButton {
-    justify-content: center;
-    align-items: center;
-    padding: 10px 15px;
-    margin-top: 10px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .registerButton:hover,
-  .withdrawButton:hover {
-    background-color: #0056b3;
-  }
-  
-  .registerButton:disabled,
-  .withdrawButton:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  } */
-  
-  .signed-up-events .event-card {
-    width: 100%; 
-  }
-  
-  .signed-up-events .event-list {
-    display: block;
-  }
-  
-  /* Responsive design adjustments */
-  @media (max-width: 768px) {
-    .event-card {
-      width: 100%; 
-    }
-  
-    .available-events {
-      flex-direction: column;
-    }
-  }
-  
+}

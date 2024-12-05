@@ -19,11 +19,29 @@ const OrganizationHome: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [showForm, setShowForm] = useState(false);
 
+  // Extract organization ID from token
+  const getOrgIDFromToken = (): string | null => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) throw new Error('No token found');
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload._id;
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
+  };
+
   // Fetch organization events
   const fetchEvents = async () => {
     try {
       const token = localStorage.getItem('token');
-      const orgID = 'organization-id-from-token'; // Replace this with logic to extract from the token
+      const orgID = getOrgIDFromToken();
+
+      if (!orgID) {
+        console.error('Organization ID not found.');
+        return;
+      }
 
       const response = await axios.get(`http://localhost:5000/api/event/organization/${orgID}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -53,8 +71,8 @@ const OrganizationHome: React.FC = () => {
 
       if (response.status === 201) {
         alert('Event added successfully');
-        fetchEvents(); // Refresh the list of events
-        setShowForm(false); // Close the form after submission
+        fetchEvents();
+        setShowForm(false);
       }
     } catch (error) {
       console.error('Error creating event:', error);
@@ -82,24 +100,26 @@ const OrganizationHome: React.FC = () => {
       <div className="event-list">
         <h2>Your Events</h2>
         {events.length > 0 ? (
-          events.map((event) => (
-            <div key={event._id} className="event-card">
-              <h3>{event.Title}</h3>
-              <p>{event.Description}</p>
-              <p>
-                <strong>Location:</strong> {event.Location}
-              </p>
-              <p>
-                <strong>Date:</strong> {new Date(event.Date).toLocaleDateString()}
-              </p>
-              <p>
-                <strong>Time:</strong> {event.StartTime} - {event.EndTime}
-              </p>
-              <p>
-                <strong>Volunteers Needed:</strong> {event.CurrentVols}/{event.VolsNeeded}
-              </p>
-            </div>
-          ))
+          <div className="event-container">
+            {events.map((event) => (
+              <div key={event._id} className="event-card">
+                <h3>{event.Title}</h3>
+                <p>{event.Description}</p>
+                <p>
+                  <strong>Location:</strong> {event.Location}
+                </p>
+                <p>
+                  <strong>Date:</strong> {new Date(event.Date).toLocaleDateString()}
+                </p>
+                <p>
+                  <strong>Time:</strong> {event.StartTime} - {event.EndTime}
+                </p>
+                <p>
+                  <strong>Volunteers Needed:</strong> {event.CurrentVols}/{event.VolsNeeded}
+                </p>
+              </div>
+            ))}
+          </div>
         ) : (
           <p>No events available. Add your first event!</p>
         )}

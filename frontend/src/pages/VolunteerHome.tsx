@@ -66,25 +66,11 @@ const VolunteerHome: React.FC = () => {
       {error && <p className="error">{error}</p>}
 
       {!loading && !error && (
-        <div className="event-container">
-          <div className="available-events">
-            <h2>Available Events</h2>
-            <div className="event-list">
-              {events.map((event) => (
-                <EventCard
-                  key={event._id}
-                  event={event}
-                  onSignUp={handleSignUp}
-                  signedUp={signedUpEvents.some((e) => e._id === event._id)}
-                  onWithdraw={handleWithdraw}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="signed-up-events">
-            <h2>Signed Up Events</h2>
-            <div className="event-list">
+        <div className="event-sections">
+          {/* Signed-Up Events Section */}
+          <div className="signed-up-section">
+            <h2>Signed-Up Events</h2>
+            <div className="signed-up-events">
               {signedUpEvents.length > 0 ? (
                 signedUpEvents.map((event) => (
                   <EventCard
@@ -97,6 +83,26 @@ const VolunteerHome: React.FC = () => {
                 ))
               ) : (
                 <p>You haven't signed up for any events yet.</p>
+              )}
+            </div>
+          </div>
+
+          {/* Available Events Section */}
+          <div className="available-section">
+            <h2>Available Events</h2>
+            <div className="available-events">
+              {events.length > 0 ? (
+                events.map((event) => (
+                  <EventCard
+                    key={event._id}
+                    event={event}
+                    onSignUp={handleSignUp}
+                    signedUp={signedUpEvents.some((e) => e._id === event._id)}
+                    onWithdraw={handleWithdraw}
+                  />
+                ))
+              ) : (
+                <p>No available events at the moment. Check back later!</p>
               )}
             </div>
           </div>
