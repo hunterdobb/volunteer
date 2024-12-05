@@ -11,6 +11,7 @@ interface Event {
   Description: string;
   VolsNeeded: number;
   CurrentVols: number;
+  Volunteers: [string];
   StartTime: string;
   EndTime: string;
 }
@@ -25,7 +26,12 @@ const VolunteerHome: React.FC = () => {
     const fetchEvents = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/event");
+        console.log("respons", response);
         setEvents(response.data);
+        // Need to get volunteer id to auto set signed up events to signedup
+        // if (!events.some((e) => e.Volunteers.includes(volunteerUser._id))) {
+          
+        // }
         setLoading(false);
       } catch (err) {
         console.error("Error fetching events:", err);
@@ -37,9 +43,42 @@ const VolunteerHome: React.FC = () => {
     fetchEvents();
   }, []);
 
+  const signUp = async (event: Event) => {
+      try {
+        const token = localStorage.getItem("token");
+        console.log("token", token)
+        const response = await axios.post(`http://localhost:5000/api/event/join/${event._id}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("Join", response);
+      } catch (err) {
+        console.error("Error joining event:", err);
+        setError("Failed to join events. Please try again later.");
+      }
+  };
+
+  const updateEvent = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/event");
+      setEvents(response.data);
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching events:", err);
+      setError("Failed to load events. Please try again later.");
+      setLoading(false);
+    }
+  };
+
   // Handle sign-up locally
   const handleSignUp = (event: Event) => {
     if (!signedUpEvents.some((e) => e._id === event._id)) {
+      signUp(event);
+      updateEvent();
       setSignedUpEvents((prev) => [...prev, event]);
       alert(`You signed up for: ${event.Title}`);
     } else {
@@ -71,6 +110,7 @@ const VolunteerHome: React.FC = () => {
             <h2>Available Events</h2>
             <div className="event-list">
               {events.map((event) => (
+                !signedUpEvents.some((e) => e._id === event._id) &&
                 <EventCard
                   key={event._id}
                   event={event}

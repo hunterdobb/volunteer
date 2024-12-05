@@ -14,6 +14,8 @@ const LoginVolunteer: React.FC = () => {
       try {
         const response = await axios.post('http://localhost:5000/api/volunteer/login', { Email, Password }); 
         const { role } = response.data; 
+        const token = response.data.token;
+        localStorage.setItem('token', token);
         
         if (role === 'volunteer') {
           navigate('/volunteer/login');
